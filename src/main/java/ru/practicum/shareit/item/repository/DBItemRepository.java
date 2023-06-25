@@ -17,18 +17,18 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class DBItemRepository implements ItemRepository {
 
-    private final Map<Long, Item > itemMap;
+    private final Map<Long, Item> itemMap;
     private final AtomicInteger ids = new AtomicInteger();
 
     @Override
-    public Optional<Item> create(Item  entity) {
+    public Optional<Item> create(Item entity) {
         entity.setId(ids.incrementAndGet());
         itemMap.put(entity.getId(), entity);
         return getById(entity.getId());
     }
 
     @Override
-    public Optional<Item > update(Item  entity) {
+    public Optional<Item> update(Item entity) {
         itemMap.put(entity.getId(), entity);
         return getById(entity.getId());
     }
@@ -39,12 +39,12 @@ public class DBItemRepository implements ItemRepository {
     }
 
     @Override
-    public List<Item > getAll() {
+    public List<Item> getAll() {
         return new ArrayList<>(itemMap.values());
     }
 
     @Override
-    public Optional<Item > getById(long id) {
+    public Optional<Item> getById(long id) {
         return Optional.ofNullable(itemMap.get(id));
     }
 
@@ -54,7 +54,7 @@ public class DBItemRepository implements ItemRepository {
     }
 
     @Override
-    public List<Item > getFromDescription(String text) {
+    public List<Item> getFromDescription(String text) {
         return Stream.of(
                         itemMap.values().stream()
                                 .filter(i -> i.getName().toLowerCase().contains(text.toLowerCase())),
@@ -68,7 +68,7 @@ public class DBItemRepository implements ItemRepository {
     }
 
     @Override
-    public List<Item > getAllFromUser(long userId) {
+    public List<Item> getAllFromUser(long userId) {
         return itemMap.values().stream().filter(u -> u.getOwnerId() == userId).collect(Collectors.toList());
     }
 }
