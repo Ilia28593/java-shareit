@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class BookingConvertorBookingResponseDto implements Converter<Booking, BookingResponseDto> {
+
     @Override
     public BookingResponseDto convert(Booking source) {
         return new BookingResponseDto(
