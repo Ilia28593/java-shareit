@@ -20,7 +20,7 @@ public abstract class CrudService<T extends Entity> extends Service<T> {
                 .orElseThrow(() -> getNoDataFoundException(Math.toIntExact(entity.getId())));
     }
 
-    public T update( T entity) {
+    public T update(T entity) {
         log.trace("Update entity {}", entity.toString());
         return this.getRepository()
                 .update(entity)

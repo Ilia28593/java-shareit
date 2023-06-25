@@ -15,9 +15,9 @@ import javax.annotation.processing.Generated;
 public class UserMapperImpl implements UserMapper{
     @Override
     public User mapToUser(UserRequestDto dto) {
-        if(dto == null){
+        if (dto == null) {
             return null;
         }
-        return new User(dto.getName(),dto.getEmail());
+        return new User(dto.getName(), dto.getEmail());
     }
 }

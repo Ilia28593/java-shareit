@@ -5,5 +5,5 @@ import ru.practicum.shareit.user.model.User;
 
 @Mapper
 public interface UserMapper {
-    User mapToUser (UserRequestDto dto);
+    User mapToUser(UserRequestDto dto);
 }

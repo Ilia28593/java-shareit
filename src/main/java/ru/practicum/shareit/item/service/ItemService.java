@@ -17,17 +17,17 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class ItemService extends CrudService<Item > {
+public class ItemService extends CrudService<Item> {
     private final ItemRepository itemRepository;
 
     private final UserService userService;
 
     @Override
-    public Item  getById(long id) {
+    public Item getById(long id) {
         return super.getById(id);
     }
 
-    public Item create(long idUser, Item  entity) {
+    public Item create(long idUser, Item entity) {
         userService.validateIds(idUser);
         if (entity.getName() == null || entity.getName().isBlank()) {
             throw new ValidationException(String.valueOf(idUser));
@@ -36,11 +36,11 @@ public class ItemService extends CrudService<Item > {
         return super.create(entity);
     }
 
-    public Item  update(long userId, long itemId, Item  entity) {
+    public Item update(long userId, long itemId, Item entity) {
         userService.validateIds(userId);
         validateIds(itemId);
         if (getById(itemId).getOwnerId() == userId) {
-            Item  item = getById(itemId);
+            Item item = getById(itemId);
             item.setName(entity.getName() != null ? entity.getName() : item.getName());
             item.setRequest(entity.getRequest() != null ? entity.getRequest() : item.getRequest());
             item.setDescription(entity.getDescription() != null ? entity.getDescription() : item.getDescription());
@@ -50,23 +50,23 @@ public class ItemService extends CrudService<Item > {
         throw new NotFoundException(String.valueOf(userId));
     }
 
-    public List<Item > getFromDescription(long userId, @NonNull String text) {
+    public List<Item> getFromDescription(long userId, @NonNull String text) {
         userService.validateIds(userId);
-        if(text.isBlank()) return new ArrayList<>();
-        return  itemRepository.getFromDescription(text);
+        if (text.isBlank()) return new ArrayList<>();
+        return itemRepository.getFromDescription(text);
     }
 
-    public List<Item > getAll(long userId) {
+    public List<Item> getAll(long userId) {
         return itemRepository.getAllFromUser(userId);
     }
 
     @Override
     protected String getServiceType() {
-        return Item .class.getSimpleName();
+        return Item.class.getSimpleName();
     }
 
     @Override
-    protected Repository<Item > getRepository() {
+    protected Repository<Item> getRepository() {
         return itemRepository;
     }
 }

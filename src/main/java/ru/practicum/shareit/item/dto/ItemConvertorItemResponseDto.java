@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class ItemConvertorItemResponseDto implements Converter<Item , ItemResponseDto> {
+public class ItemConvertorItemResponseDto implements Converter<Item, ItemResponseDto> {
     @Override
-    public ItemResponseDto convert(Item  source) {
+    public ItemResponseDto convert(Item source) {
         return new ItemResponseDto(
                 source.getId(),
                 source.getName(),
