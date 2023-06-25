@@ -33,19 +33,19 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemResponseDto getById(@PathVariable long itemId){
+    public ItemResponseDto getById(@PathVariable long itemId) {
         return convertor.convert(itemService.getById(itemId));
     }
 
     @GetMapping
-    public List<ItemResponseDto> getAll(@RequestHeader("X-Sharer-User-Id") long userId){
+    public List<ItemResponseDto> getAll(@RequestHeader("X-Sharer-User-Id") long userId) {
         return convertor.getListResponse(itemService.getAll(userId));
     }
 
     @GetMapping("/search")
-    public List<ItemResponseDto> getFromDescription(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam(name = "text") String description){
+    public List<ItemResponseDto> getFromDescription(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam(name = "text") String description) {
         String d = description;
-        itemService.getFromDescription(userId,description);
-        return convertor.getListResponse(itemService.getFromDescription(userId,description));
+        itemService.getFromDescription(userId, description);
+        return convertor.getListResponse(itemService.getFromDescription(userId, description));
     }
 }
