@@ -12,7 +12,7 @@ import javax.annotation.processing.Generated;
         comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.6 (Amazon.com Inc.)"
 )
 @Component
-public class UserMapperImpl implements UserMapper{
+public class UserMapperImpl implements UserMapper {
     @Override
     public User mapToUser(UserRequestDto dto) {
         if (dto == null) {

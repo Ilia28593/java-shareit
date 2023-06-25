@@ -1,7 +1,6 @@
 package ru.practicum.shareit.request.dto;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.request.model.ItemRequest;
 
 import javax.annotation.processing.Generated;
