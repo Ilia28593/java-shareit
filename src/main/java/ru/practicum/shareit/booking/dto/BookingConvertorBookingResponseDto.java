@@ -12,13 +12,14 @@ public class BookingConvertorBookingResponseDto implements Converter<Booking, Bo
 
     @Override
     public BookingResponseDto convert(Booking source) {
-        return new BookingResponseDto(
-                source.getId(),
-                source.getStart(),
-                source.getEnd(),
-                source.getItem(),
-                source.getBooker(),
-                source.getBookingStatus());
+        return BookingResponseDto.builder()
+                .id(source.getId())
+                .start(source.getStart())
+                .end(source.getEnd())
+                .item(source.getItem())
+                .booker(source.getBooker())
+                .bookingStatus(source.getBookingStatus())
+                .build();
     }
 
     public List<BookingResponseDto> getListResponse(List<Booking> list) {

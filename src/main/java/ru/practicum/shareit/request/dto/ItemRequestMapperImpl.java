@@ -17,11 +17,11 @@ public class ItemRequestMapperImpl implements ItemRequestMapper {
         if (dto == null) {
             return null;
         }
-        ItemRequest itemRequest = new ItemRequest();
-        itemRequest.setId(dto.getId());
-        itemRequest.setDescription(dto.getDescription());
-        itemRequest.setCreated(dto.getCreated());
-        itemRequest.setRequestor(dto.getRequestor());
-        return null;
+        return ItemRequest.builder()
+                .id(dto.getId())
+                .description(dto.getDescription())
+                .created(dto.getCreated())
+                .requestor(dto.getRequestor())
+                .build();
     }
 }

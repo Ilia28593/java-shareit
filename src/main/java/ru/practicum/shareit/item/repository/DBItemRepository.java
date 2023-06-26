@@ -63,12 +63,14 @@ public class DBItemRepository implements ItemRepository {
                 )
                 .flatMap(Stream::distinct)
                 .distinct()
-                .filter(item -> item.getAvailable() == true)
+                .filter(Item::getAvailable)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Item> getAllFromUser(long userId) {
-        return itemMap.values().stream().filter(u -> u.getOwnerId() == userId).collect(Collectors.toList());
+        return itemMap.values().stream()
+                .filter(u -> u.getOwnerId() == userId)
+                .collect(Collectors.toList());
     }
 }

@@ -18,13 +18,13 @@ public class BookngMapperImpl implements BookingMapper {
         if (dto == null) {
             return null;
         }
-        Booking booking = new Booking();
-        booking.setStart(dto.getStart());
-        booking.setEnd(dto.getEnd());
-        booking.setItem(dto.getItem());
-        booking.setBooker(dto.getBooker());
-
-        return booking;
+        return Booking.builder()
+                .start(dto.getStart())
+                .end(dto.getEnd())
+                .item(dto.getItem())
+                .booker(dto.getBooker())
+                .bookingStatus(dto.getBookingStatus())
+                .build();
     }
 }
 

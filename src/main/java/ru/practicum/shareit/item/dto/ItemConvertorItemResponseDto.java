@@ -11,12 +11,13 @@ import java.util.stream.Collectors;
 public class ItemConvertorItemResponseDto implements Converter<Item, ItemResponseDto> {
     @Override
     public ItemResponseDto convert(Item source) {
-        return new ItemResponseDto(
-                source.getId(),
-                source.getName(),
-                source.getDescription(),
-                source.getAvailable(),
-                source.getRequest());
+        return ItemResponseDto.builder()
+                .id(source.getId())
+                .name(source.getName())
+                .description(source.getDescription())
+                .available(source.getAvailable())
+                .request(source.getRequest())
+                .build();
     }
 
     public List<ItemResponseDto> getListResponse(List<Item> list) {

@@ -18,6 +18,9 @@ public class UserMapperImpl implements UserMapper {
         if (dto == null) {
             return null;
         }
-        return new User(dto.getName(), dto.getEmail());
+        return User.builder()
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .build();
     }
 }
