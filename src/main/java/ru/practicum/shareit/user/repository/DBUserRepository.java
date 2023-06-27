@@ -34,7 +34,6 @@ public class DBUserRepository implements UserRepository {
 
     @Override
     public Optional<User> create(User entity) {
-        existEmail(entity.getEmail());
         entity.setId(ids.incrementAndGet());
         userMap.put(entity.getId(), entity);
         return getById(entity.getId());
@@ -42,15 +41,7 @@ public class DBUserRepository implements UserRepository {
 
     @Override
     public Optional<User> update(User entity) {
-        existsById(entity.getId());
-        User u = getById(entity.getId()).get();
-        if (entity.getEmail() != null) {
-            if (entity.getEmail().equals(u.getEmail()) || existEmail(entity.getEmail())) {
-                u.setEmail(entity.getEmail() != null ? entity.getEmail() : u.getEmail());
-            }
-        }
-        u.setName(entity.getName() != null ? entity.getName() : u.getName());
-        userMap.put(u.getId(), u);
+        userMap.put(entity.getId(), entity);
         return getById(entity.getId());
     }
 
@@ -61,9 +52,6 @@ public class DBUserRepository implements UserRepository {
 
 
     public boolean existEmail(String email) {
-        if (userMap.values().stream().map(User::getEmail).filter(e -> e.equals(email)).findFirst().isEmpty()) {
-            return true;
-        }
-        throw new NumberFormatException(email);
+        return userMap.values().stream().map(User::getEmail).anyMatch(e -> e.equals(email));
     }
 }
