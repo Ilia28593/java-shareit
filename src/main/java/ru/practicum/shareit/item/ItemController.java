@@ -23,12 +23,14 @@ public class ItemController {
     private final ItemConvertorItemResponseDto convertor;
 
     @PostMapping
-    public ItemResponseDto createItem(@RequestHeader("X-Sharer-User-Id") long userId, @RequestBody ItemRequestCreateDto requestDto) {
+    public ItemResponseDto createItem(@RequestHeader("X-Sharer-User-Id") long userId,
+                                      @RequestBody ItemRequestCreateDto requestDto) {
         return convertor.convert(itemService.create(userId, mapper.mapToItem(requestDto)));
     }
 
     @PatchMapping("/{itemId}")
-    public ItemResponseDto updateItem(@PathVariable long itemId, @RequestHeader("X-Sharer-User-Id") long userId, @RequestBody ItemRequestDto requestDto) {
+    public ItemResponseDto updateItem(@PathVariable long itemId,
+                                      @RequestHeader("X-Sharer-User-Id") long userId, @RequestBody ItemRequestDto requestDto) {
         return convertor.convert(itemService.update(userId, itemId, mapper.mapToItem(requestDto)));
     }
 
@@ -43,7 +45,8 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemResponseDto> getFromDescription(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam(name = "text") String description) {
+    public List<ItemResponseDto> getFromDescription(@RequestHeader("X-Sharer-User-Id") long userId,
+                                                    @RequestParam(name = "text") String description) {
         String d = description;
         itemService.getFromDescription(userId, description);
         return convertor.getListResponse(itemService.getFromDescription(userId, description));

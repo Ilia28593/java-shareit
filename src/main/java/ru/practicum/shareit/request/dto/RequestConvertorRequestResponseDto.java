@@ -9,11 +9,11 @@ public class RequestConvertorRequestResponseDto implements Converter<ItemRequest
 
     @Override
     public ItemResponseResponseDto convert(ItemRequest source) {
-        ItemResponseResponseDto itemRequest = new ItemResponseResponseDto();
-        itemRequest.setId(source.getId());
-        itemRequest.setRequestor(source.getRequestor());
-        itemRequest.setDescription(source.getDescription());
-        itemRequest.setCreated(source.getCreated());
-        return itemRequest;
+        return ItemResponseResponseDto.builder()
+                .id(source.getId())
+                .requestor(source.getRequestor())
+                .description(source.getDescription())
+                .created(source.getCreated())
+                .build();
     }
 }
