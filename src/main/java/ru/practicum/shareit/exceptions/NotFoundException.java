@@ -12,6 +12,8 @@ public class NotFoundException extends RuntimeException {
     }
 
     public NotFoundException(String message, long id) {
-        super(String.format(NOT_FOUND_EXCEPTION_MESSAGE, message, id));
+        super(String.format(NOT_FOUND_EXCEPTION_MESSAGE, message));
     }
+
+
 }

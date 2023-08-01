@@ -5,12 +5,13 @@ import lombok.Data;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder(toBuilder = true)
 public class ItemResponseResponseDto {
     private long id;
     private String description;
-    private User requestor;
+    private List<User> requester;
     private LocalDateTime created;
 }

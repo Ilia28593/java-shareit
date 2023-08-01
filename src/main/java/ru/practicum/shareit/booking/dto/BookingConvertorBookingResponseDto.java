@@ -3,6 +3,8 @@ package ru.practicum.shareit.booking.dto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.dto.ItemResponseNameDto;
+import ru.practicum.shareit.user.dto.UserIdDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,9 +18,14 @@ public class BookingConvertorBookingResponseDto implements Converter<Booking, Bo
                 .id(source.getId())
                 .start(source.getStart())
                 .end(source.getEnd())
-                .item(source.getItem())
-                .booker(source.getBooker())
-                .bookingStatus(source.getBookingStatus())
+                .booker(UserIdDto.builder()
+                        .id(source.getBooker().getId())
+                        .build())
+                .status(source.getBookingStatus())
+                .item(ItemResponseNameDto.builder()
+                        .name(source.getItem().getName())
+                        .id(source.getItem().getId())
+                        .build())
                 .build();
     }
 

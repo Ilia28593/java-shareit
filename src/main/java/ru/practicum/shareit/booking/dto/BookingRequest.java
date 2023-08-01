@@ -2,8 +2,8 @@ package ru.practicum.shareit.booking.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 import ru.practicum.shareit.booking.model.BookingStatus;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder(toBuilder = true)
-public class BookingRequestDto {
-    private long id;
+public class BookingRequest {
+    @NonNull
     private LocalDateTime start;
+    @NonNull
     private LocalDateTime end;
-    private Item item;
-    private User booker;
-    private BookingStatus bookingStatus;
+    @NonNull
+    private Long itemId;
 }

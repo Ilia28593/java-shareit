@@ -11,7 +11,7 @@ public class RequestConvertorRequestResponseDto implements Converter<ItemRequest
     public ItemResponseResponseDto convert(ItemRequest source) {
         return ItemResponseResponseDto.builder()
                 .id(source.getId())
-                .requestor(source.getRequestor())
+                .requester(source.getRequester())
                 .description(source.getDescription())
                 .created(source.getCreated())
                 .build();

@@ -21,7 +21,7 @@ public class ItemRequestMapperImpl implements ItemRequestMapper {
                 .id(dto.getId())
                 .description(dto.getDescription())
                 .created(dto.getCreated())
-                .requestor(dto.getRequestor())
+                .requester(dto.getRequester())
                 .build();
     }
 }

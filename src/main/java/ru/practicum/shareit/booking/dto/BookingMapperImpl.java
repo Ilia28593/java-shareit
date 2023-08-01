@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.dto;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.model.Item;
 
 import javax.annotation.processing.Generated;
 
@@ -11,7 +12,7 @@ import javax.annotation.processing.Generated;
         comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.6 (Amazon.com Inc.)"
 )
 @Component
-public class BookngMapperImpl implements BookingMapper {
+public class BookingMapperImpl implements BookingMapper {
 
     @Override
     public Booking mapToBooking(BookingRequestDto dto) {
@@ -24,6 +25,16 @@ public class BookngMapperImpl implements BookingMapper {
                 .item(dto.getItem())
                 .booker(dto.getBooker())
                 .bookingStatus(dto.getBookingStatus())
+                .build();
+    }
+
+    public Booking mapToBooking(BookingRequest dto) {
+        if (dto == null) {
+            return null;
+        }
+        return Booking.builder()
+                .start(dto.getStart())
+                .end(dto.getEnd())
                 .build();
     }
 }

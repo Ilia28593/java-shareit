@@ -1,10 +1,11 @@
-package ru.practicum.shareit.item.model;
+package ru.practicum.shareit.coment.model;
 
 import lombok.*;
-import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @Builder(toBuilder = true)
@@ -14,30 +15,26 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@Table(name = "items")
-public class Item {
+@Table(name = "comments")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "description", nullable = false)
-    private String description;
-
-    @Column(name = "is_available")
-    @Builder.Default
-    private Boolean available = false;
+    @Column(name = "text", nullable = false)
+    private String text;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @CollectionTable(name = "users", joinColumns = @JoinColumn(name = "id"))
     @ToString.Exclude
-    private User owner;
+    private User author;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @CollectionTable(name = "requests", joinColumns = @JoinColumn(name = "id"))
-    private ItemRequest request;
+    @CollectionTable(name = "items", joinColumns = @JoinColumn(name = "id"))
+    private Item item;
+
+    @Column(name = "create_date", nullable = false)
+    private LocalDateTime created;
 
     @Override
     public int hashCode() {
@@ -47,7 +44,7 @@ public class Item {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Item)) return false;
-        return id != null && id.equals(((Item) o).getId());
+        if (!(o instanceof Comment)) return false;
+        return id != null && id.equals(((Comment) o).getId());
     }
 }

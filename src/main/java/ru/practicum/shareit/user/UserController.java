@@ -7,7 +7,7 @@ import ru.practicum.shareit.user.dto.UserConvectorResponseDto;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.dto.UserRequestDto;
 import ru.practicum.shareit.user.dto.UserResponseDto;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserController {
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final UserConvectorResponseDto userConvectorResponseDto;
     private final UserMapper userMapper;
 
