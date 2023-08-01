@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.service;
+package ru.practicum.shareit.booking.repository.service;
 
 import ru.practicum.shareit.booking.model.Booking;
 
