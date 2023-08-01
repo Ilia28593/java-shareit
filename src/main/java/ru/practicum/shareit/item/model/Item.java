@@ -5,6 +5,7 @@ import lombok.Data;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.service.Entity;
 
+
 @Data
 @Builder(toBuilder = true)
 public class Item extends Entity {
