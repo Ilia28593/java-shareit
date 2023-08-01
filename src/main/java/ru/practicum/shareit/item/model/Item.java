@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.service.Entity;
 
-/**
- * TODO Sprint add-controllers.
- */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
