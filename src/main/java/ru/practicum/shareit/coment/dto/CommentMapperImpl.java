@@ -1,14 +1,9 @@
 package ru.practicum.shareit.coment.dto;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.booking.dto.BookingMapper;
-import ru.practicum.shareit.booking.dto.BookingRequest;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.coment.model.Comment;
 
 import javax.annotation.processing.Generated;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Generated(
