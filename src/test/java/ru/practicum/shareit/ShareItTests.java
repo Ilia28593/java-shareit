@@ -7,12 +7,5 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ShareItTests {
 
 
-    @Test
-    void contextLoads() {
-    }
-    @Test
-    void contextLoadss() {
-    }
-
 
 }
