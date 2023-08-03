@@ -23,8 +23,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static ru.practicum.shareit.config.Constants.VALIDATION_EXCEPTION_ITEM;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -41,7 +42,7 @@ public class ItemServiceImpl extends CrudService<Item> implements ItemService {
     @Override
     public GetItemResponseDTO getByIdFull(long userId, long itemId) {
         if (getById(itemId).getOwner().getId() == userId) {
-            return getGetItemOwnerResponseDTO(itemId, userId);
+            return getGetItemOwnerResponseDTO(itemId);
         }
         return convertor.convertFromUpdate(super.getById(itemId), commentRepository.findAllByItemIdOrderByCreatedDesc(itemId));
     }
@@ -49,12 +50,12 @@ public class ItemServiceImpl extends CrudService<Item> implements ItemService {
     @Override
     public Comment createComment(long userId, long itemId, Comment comment) {
         if (comment.getText().isBlank()) {
-            throw new ValidationException(String.format("Exception from create comment from item id %n", itemId));
+            throw new ValidationException(String.format(VALIDATION_EXCEPTION_ITEM, itemId));
         }
         List<Booking> booking = bookingRepository.findAllByItemIdAndBookerIdAndBookingStatusAndEndBefore(itemId, userId,
                 BookingStatus.APPROVED, LocalDateTime.now());
         if (booking.isEmpty()) {
-            throw new ValidationException(String.format("Exception from create comment from item id %n", itemId));
+            throw new ValidationException(String.format(VALIDATION_EXCEPTION_ITEM, itemId));
         }
         comment.setAuthor(userService.getById(userId));
         comment.setItem(itemRepository.getById(itemId));
@@ -62,7 +63,7 @@ public class ItemServiceImpl extends CrudService<Item> implements ItemService {
         return commentCreated;
     }
 
-    private GetItemResponseDTO getGetItemOwnerResponseDTO(long itemId, long userId) {
+    private GetItemResponseDTO getGetItemOwnerResponseDTO(long itemId) {
         List<Booking> bookingByIdItemId = bookingRepository.findLastBookingByIdItemId(itemId);
         List<Booking> listNextBooking = bookingByIdItemId.stream().filter(booking -> booking.getStart().isAfter(LocalDateTime.now())).sorted(Comparator.comparing(Booking::getStart)).collect(Collectors.toList());
         List<Booking> listLastBooking = bookingByIdItemId.stream().filter(booking -> booking.getStart().isBefore(LocalDateTime.now())).sorted(Comparator.comparing(Booking::getEnd).reversed()).collect(Collectors.toList());
@@ -112,11 +113,12 @@ public class ItemServiceImpl extends CrudService<Item> implements ItemService {
                 .filter(Item::getAvailable)
                 .collect(Collectors.toList());
     }
+
     @Override
     public List<GetItemResponseDTO> getAllByOwner(long userId) {
         return itemRepository.findAllByOwnerIdOrderById(userId).stream()
                 .map(Item::getId)
-                .map(i -> getGetItemOwnerResponseDTO(i, userId))
+                .map(i -> getGetItemOwnerResponseDTO(i))
                 .collect(Collectors.toList());
     }
 

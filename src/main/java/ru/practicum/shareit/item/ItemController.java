@@ -7,16 +7,14 @@ import ru.practicum.shareit.coment.dto.CommentConvertorCommentResponseDto;
 import ru.practicum.shareit.coment.dto.CommentMapperImpl;
 import ru.practicum.shareit.coment.dto.CommentRequestDto;
 import ru.practicum.shareit.coment.dto.CommentResponseDto;
-import ru.practicum.shareit.coment.model.Comment;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
 
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
+import static ru.practicum.shareit.config.Constants.USER_ID;
+
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -32,7 +30,7 @@ public class ItemController {
     private final CommentConvertorCommentResponseDto convertorComment;
 
     @PostMapping
-    public ItemResponseDto createItem(@RequestHeader("X-Sharer-User-Id") long userId,
+    public ItemResponseDto createItem(@RequestHeader(USER_ID) long userId,
                                       @RequestBody ItemRequestCreateDto requestDto) {
         Item item = mapper.mapToItem(requestDto);
         Item i = itemService.create(userId, item);
@@ -41,34 +39,30 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public CommentResponseDto createItem(@PathVariable long itemId,
-                                         @RequestHeader("X-Sharer-User-Id") long userId,
+                                         @RequestHeader(USER_ID) long userId,
                                          @RequestBody CommentRequestDto requestDto) {
-        Comment comment = commentMapper.mapToComment(requestDto);
-        Comment i = itemService.createComment(userId,itemId,comment);
-        return convertorComment.convert(i);
+        return convertorComment.convert(itemService.createComment(userId, itemId, commentMapper.mapToComment(requestDto)));
     }
 
     @PatchMapping("/{itemId}")
     public ItemResponseDto updateItem(@PathVariable long itemId,
-                                      @RequestHeader("X-Sharer-User-Id") long userId, @RequestBody ItemRequestDto requestDto) {
+                                      @RequestHeader(USER_ID) long userId, @RequestBody ItemRequestDto requestDto) {
         return convertor.convert(itemService.update(userId, itemId, mapper.mapToItem(requestDto)));
     }
 
     @GetMapping("/{itemId}")
-    public GetItemResponseDTO getById(@PathVariable long itemId, @RequestHeader("X-Sharer-User-Id") long userId) {
+    public GetItemResponseDTO getById(@PathVariable long itemId, @RequestHeader(USER_ID) long userId) {
         return itemService.getByIdFull(userId, itemId);
     }
 
     @GetMapping
-    public List<GetItemResponseDTO> getAll(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public List<GetItemResponseDTO> getAll(@RequestHeader(USER_ID) long userId) {
         return itemService.getAllByOwner(userId);
     }
 
     @GetMapping("/search")
-    public List<ItemResponseDto> getFromDescription(@RequestHeader("X-Sharer-User-Id") long userId,
+    public List<ItemResponseDto> getFromDescription(@RequestHeader(USER_ID) long userId,
                                                     @RequestParam(name = "text") String description) {
-        String d = description;
-        itemService.getFromDescription(userId, description);
         return convertor.getListResponse(itemService.getFromDescription(userId, description));
     }
 }

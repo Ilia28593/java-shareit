@@ -30,7 +30,8 @@ public class UserServiceImpl extends CrudService<User> implements UserService {
     public User update(long id, User entity) {
         User u = getById(id);
         entity.setId(id);
-        if(entity.getEmail() != null && (!u.getEmail().equals(entity.getEmail()))){checkValidEmail(entity.getEmail());
+        if (entity.getEmail() != null && (!u.getEmail().equals(entity.getEmail()))) {
+            checkValidEmail(entity.getEmail());
         }
         u.setEmail(entity.getEmail() != null ? entity.getEmail() : u.getEmail());
         u.setName(entity.getName() != null ? entity.getName() : u.getName());
@@ -49,7 +50,7 @@ public class UserServiceImpl extends CrudService<User> implements UserService {
     }
 
     @Override
-    public JpaRepository<User,Long> getRepository() {
+    public JpaRepository<User, Long> getRepository() {
         return this.userRepository;
     }
 }

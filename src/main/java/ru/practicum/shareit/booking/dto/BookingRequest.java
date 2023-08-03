@@ -3,8 +3,6 @@ package ru.practicum.shareit.booking.dto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
-import ru.practicum.shareit.booking.model.BookingStatus;
-import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 

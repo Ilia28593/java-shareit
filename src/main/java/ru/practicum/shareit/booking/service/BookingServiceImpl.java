@@ -1,10 +1,9 @@
-package ru.practicum.shareit.booking.repository.service;
+package ru.practicum.shareit.booking.service;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.dto.BookingConvertorBookingResponseDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -29,12 +28,10 @@ public class BookingServiceImpl extends CrudService<Booking> implements BookingS
 
     private final ItemServiceImpl itemService;
 
-    private final BookingConvertorBookingResponseDto convertor;
-
     @Override
     public Booking getInfoBooking(long userId, long bookingId) {
         Booking booking = getById(bookingId);
-        if (booking.getItem().getOwner().getId() == userId || booking.getBooker().getId() == userId) { //////////
+        if (booking.getItem().getOwner().getId() == userId || booking.getBooker().getId() == userId) {
             return booking;
         }
         if (booking.getItem().getOwner().getId() != userId) {
@@ -61,20 +58,11 @@ public class BookingServiceImpl extends CrudService<Booking> implements BookingS
 
     @Override
     public Booking create(long idUser, long idItem, Booking entity) {
-//        entity.getStart().plusSeconds(1);
         Item item = itemService.getById(idItem);
         validDate(entity, item, idUser);
         entity.setBooker(userService.getById(idUser));
         entity.setItem(item);
         entity.setBookingStatus(BookingStatus.WAITING);
-//        Optional<Booking> wait = bookingRepository.findById(idUser,idItem);
-//        if (wait.isPresent()) {
-//            if (entity.equals(wait.get())){
-//
-//                return bookingRepository.findById(entity.getId()).orElseThrow();
-//            }
-//        }
-//        return wait.orElseThrow();
         super.create(entity);
         return bookingRepository.findById(entity.getId()).orElseThrow();
     }

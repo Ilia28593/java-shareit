@@ -17,5 +17,5 @@ public interface ItemService {
 
     GetItemResponseDTO getByIdFull(long userId, long itemId);
 
-    Comment createComment(long userId,long itemId, Comment comment);
+    Comment createComment(long userId, long itemId, Comment comment);
 }
