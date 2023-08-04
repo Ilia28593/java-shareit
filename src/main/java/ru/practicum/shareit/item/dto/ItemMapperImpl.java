@@ -17,14 +17,28 @@ public class ItemMapperImpl implements ItemMapper {
         if (dto == null) {
             return null;
         }
-        return new Item (dto.getId(), dto.getName(), dto.getDescription(), dto.getAvailable(), dto.getOwnerId(), dto.request);
+        return Item.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .available(dto.getAvailable())
+                .owner(dto.getOwner())
+                .request(dto.getRequest())
+                .build();
     }
 
-    public Item  mapToItem(ItemRequestCreateDto dto) {
+    public Item mapToItem(ItemRequestCreateDto dto) {
         if (dto == null) {
             return null;
         }
-        return new Item (dto.getId(), dto.getName(), dto.getDescription(), dto.getAvailable(), dto.getOwnerId(), dto.request);
+        return Item.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .available(dto.getAvailable())
+                .owner(dto.getOwner())
+                .request(dto.getRequest())
+                .build();
     }
 }
 

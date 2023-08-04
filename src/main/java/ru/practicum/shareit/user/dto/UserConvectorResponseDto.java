@@ -11,7 +11,11 @@ import java.util.stream.Collectors;
 public class UserConvectorResponseDto implements Converter<User, UserResponseDto> {
     @Override
     public UserResponseDto convert(User source) {
-        return new UserResponseDto(source.getId(), source.getName(), source.getEmail());
+        return UserResponseDto.builder()
+                .id(source.getId())
+                .name(source.getName())
+                .email(source.getEmail())
+                .build();
     }
 
     public List<UserResponseDto> getListResponse(List<User> list) {

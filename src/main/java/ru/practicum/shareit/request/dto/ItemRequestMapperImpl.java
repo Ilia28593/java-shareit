@@ -1,7 +1,6 @@
 package ru.practicum.shareit.request.dto;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.request.model.ItemRequest;
 
 import javax.annotation.processing.Generated;
@@ -18,11 +17,11 @@ public class ItemRequestMapperImpl implements ItemRequestMapper {
         if (dto == null) {
             return null;
         }
-        ItemRequest itemRequest = new ItemRequest();
-        itemRequest.setId(dto.getId());
-        itemRequest.setDescription(dto.getDescription());
-        itemRequest.setCreated(dto.getCreated());
-        itemRequest.setRequestor(dto.getRequestor());
-        return null;
+        return ItemRequest.builder()
+                .id(dto.getId())
+                .description(dto.getDescription())
+                .created(dto.getCreated())
+                .requester(dto.getRequester())
+                .build();
     }
 }
