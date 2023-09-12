@@ -2,41 +2,40 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.dto.UserConvectorResponseDto;
-import ru.practicum.shareit.user.dto.UserMapper;
-import ru.practicum.shareit.user.dto.UserRequestDto;
-import ru.practicum.shareit.user.dto.UserResponseDto;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.config.Create;
+import ru.practicum.shareit.config.Update;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserController {
-    private final UserService userService;
-    private final UserConvectorResponseDto userConvectorResponseDto;
-    private final UserMapper userMapper;
 
-    @GetMapping
-    public List<UserResponseDto> getAllUser() {
-        return userConvectorResponseDto.getListResponse(userService.getAll());
-    }
+    private final UserService userService;
 
     @GetMapping("/{userId}")
-    public UserResponseDto get(@PathVariable long userId) {
-        return userConvectorResponseDto.convert(userService.getById(userId));
+    public UserDto getById(@PathVariable long userId) {
+        return userService.getById(userId);
+    }
+
+    @GetMapping
+    public Collection<UserDto> getAll() {
+        return userService.getAll();
     }
 
     @PostMapping
-    public UserResponseDto create(@RequestBody UserRequestDto requestDto) {
-        return userConvectorResponseDto.convert(userService.create(userMapper.mapToUser(requestDto)));
+    public UserDto create(@Validated(Create.class) @RequestBody UserDto userDto) {
+        return userService.create(userDto);
     }
 
     @PatchMapping("/{userId}")
-    public UserResponseDto update(@PathVariable long userId, @RequestBody UserRequestDto requestDto) {
-        return userConvectorResponseDto.convert(userService.update(userId, userMapper.mapToUser(requestDto)));
+    public UserDto update(@Validated(Update.class) @RequestBody UserDto userDto, @PathVariable long userId) {
+        userDto.setId(userId);
+        return userService.update(userDto);
     }
 
     @DeleteMapping("/{userId}")

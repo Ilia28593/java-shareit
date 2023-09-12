@@ -1,9 +1,20 @@
 package ru.practicum.shareit.item.dto;
 
-import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.dto.BookingInItemDtoResponse;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
 
-@Mapper
+import java.util.Collection;
+
+@Component
 public interface ItemMapper {
-    Item mapToItem(ItemRequestDto dto);
+    ItemDto toItemDto(Item item);
+
+    ItemDtoWithBookingDto toItemDtoWithBookingDto(Item item,
+                                                  BookingInItemDtoResponse lastBooking,
+                                                  BookingInItemDtoResponse nextBooking,
+                                                  Collection<CommentResponseDto> comments);
+
+    Item toItem(ItemDto itemDto, User user);
 }
