@@ -4,11 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.config.Create;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentResponseDto;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoWithBookingDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.Collection;
+
 import static ru.practicum.shareit.config.Constants.HEADER_USER_ID;
 
 @RestController
