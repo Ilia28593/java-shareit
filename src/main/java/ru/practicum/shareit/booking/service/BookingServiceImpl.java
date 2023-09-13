@@ -3,18 +3,18 @@ package ru.practicum.shareit.booking.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.reposotory.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.model.BookingStatusFilter;
+import ru.practicum.shareit.booking.reposotory.BookingRepository;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.PermissionViolationException;
-import ru.practicum.shareit.item.reposotory.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.reposotory.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -50,7 +50,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
 
-
     @Override
     public BookingDtoResponse approve(long bookingId, boolean approved, long userId) {
         Booking booking = getBooking(bookingId, userId);
@@ -63,7 +62,6 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(approved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
         return bookingMapper.toBookingDtoResponse(bookingRepository.save(booking));
     }
-
 
 
     @Override
@@ -124,7 +122,7 @@ public class BookingServiceImpl implements BookingService {
 
     private User getUser(long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException( ITEM_NO_FOUND_FROM_ID + userId));
+                .orElseThrow(() -> new NotFoundException(ITEM_NO_FOUND_FROM_ID + userId));
     }
 
     private Booking getBooking(long bookingId, long userId) {
