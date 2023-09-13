@@ -37,12 +37,10 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDtoResponse create(BookingDtoRequest bookingDtoRequest, long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ITEM_NO_FOUND_FROM_ID + userId));
-        Item item = itemRepository.findById(bookingDtoRequest.getItemId())
-                .orElseThrow(() -> new NotFoundException(ITEM_NO_FOUND_FROM_ID + bookingDtoRequest.getItemId()));
+        User user = getUser(userId);
+        Item item = getItem(bookingDtoRequest);
         if (Boolean.FALSE.equals(item.getAvailable())) {
-            throw new BadRequestException(ITEM_NOT_AVAILABLE + item.getId());
+            throw new BadRequestException(ITEM_NOT_AVAILABLE_BY_ID + item.getId());
         }
         if (item.getOwner().getId() == userId) {
             throw new NotFoundException(String.format("user can not book its own item id %s", item.getId()));
@@ -51,10 +49,11 @@ public class BookingServiceImpl implements BookingService {
         return bookingMapper.toBookingDtoResponse(bookingRepository.save(booking));
     }
 
+
+
     @Override
     public BookingDtoResponse approve(long bookingId, boolean approved, long userId) {
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException(USER_NO_FOUND_FROM_ID + userId));
+        Booking booking = getBooking(bookingId, userId);
         if (booking.getItem().getOwner().getId() != userId) {
             throw new PermissionViolationException("Only item owner can approve booking");
         }
@@ -65,12 +64,12 @@ public class BookingServiceImpl implements BookingService {
         return bookingMapper.toBookingDtoResponse(bookingRepository.save(booking));
     }
 
+
+
     @Override
     public BookingDtoResponse getById(long bookingId, long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(USER_NO_FOUND_FROM_ID + userId));
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException(BOOKING_NO_FOUND_BY_ID + bookingId));
+        User user = getUser(userId);
+        Booking booking = getBooking(bookingId, bookingId);
         if (!Objects.equals(booking.getBooker(), user) && !Objects.equals(booking.getItem().getOwner(), user)) {
             throw new NotFoundException("Booking was not booked by user and item owner is different");
         }
@@ -81,8 +80,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Collection<BookingDtoResponse> allFromItemOwnerId(BookingStatusFilter state, long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(USER_NO_FOUND_FROM_ID + userId));
+        User user = getUser(userId);
         Collection<Booking> bookings;
         switch (state) {
             case CURRENT:
@@ -113,10 +111,24 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Collection<BookingDtoResponse> allFromBookerId(BookingStatusFilter state, long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(USER_NO_FOUND_FROM_ID + userId));
+        User user = getUser(userId);
         Collection<Booking> bookings = bookingStateFetchBookerStrategyFactory.findStrategy(state).fetch(user);
         return bookings.stream().map(bookingMapper::toBookingDtoResponse)
                 .collect(Collectors.toList());
+    }
+
+    private Item getItem(BookingDtoRequest bookingDtoRequest) {
+        return itemRepository.findById(bookingDtoRequest.getItemId())
+                .orElseThrow(() -> new NotFoundException(ITEM_NO_FOUND_FROM_ID + bookingDtoRequest.getItemId()));
+    }
+
+    private User getUser(long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException( ITEM_NO_FOUND_FROM_ID + userId));
+    }
+
+    private Booking getBooking(long bookingId, long userId) {
+        return bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException(BOOKING_NO_FOUND_BY_ID + userId));
     }
 }

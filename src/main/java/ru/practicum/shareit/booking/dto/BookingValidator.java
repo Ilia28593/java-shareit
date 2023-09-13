@@ -7,10 +7,11 @@ import java.time.LocalDateTime;
 public class BookingValidator implements ConstraintValidator<BookingValid, BookingDtoRequest> {
     @Override
     public boolean isValid(BookingDtoRequest bookingDtoRequest, ConstraintValidatorContext context) {
+        LocalDateTime currentTime = LocalDateTime.now();
         if (bookingDtoRequest.getStart() != null
                 && bookingDtoRequest.getEnd() != null
-                && (bookingDtoRequest.getStart().isBefore(LocalDateTime.now())
-                || bookingDtoRequest.getEnd().isBefore(LocalDateTime.now())
+                && (bookingDtoRequest.getStart().isBefore(currentTime)
+                || bookingDtoRequest.getEnd().isBefore(currentTime)
                 || bookingDtoRequest.getStart().isAfter(bookingDtoRequest.getEnd())
                 || bookingDtoRequest.getStart().isEqual(bookingDtoRequest.getEnd()))
         ) {

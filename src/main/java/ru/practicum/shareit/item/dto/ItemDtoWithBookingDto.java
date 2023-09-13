@@ -18,8 +18,10 @@ import java.util.Collection;
 public class ItemDtoWithBookingDto {
     private Long id;
     @NotEmpty(message = "name can not be empty", groups = {Create.class})
+    @NotNull
     private String name;
     @NotEmpty(message = "description can not be empty", groups = {Create.class})
+    @NotNull
     private String description;
     @NotNull(message = "available can not be empty", groups = {Create.class})
     private Boolean available;
