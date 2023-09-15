@@ -1,72 +1,26 @@
 package ru.practicum.shareit.item.service;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.exceptions.ValidationException;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.user.repository.Repository;
-import ru.practicum.shareit.user.service.CrudService;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentResponseDto;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoWithBookingDto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class ItemService extends CrudService<Item> {
-    private final ItemRepository itemRepository;
+public interface ItemService {
+    ItemDtoWithBookingDto getById(long itemId, long userId);
 
-    private final UserService userService;
+    Collection<ItemDtoWithBookingDto> findByUserId(long userId);
 
-    @Override
-    public Item getById(long id) {
-        return super.getById(id);
-    }
+    ItemDto create(ItemDto itemDto, long userId);
 
-    public Item create(long idUser, Item entity) {
-        userService.validateIds(idUser);
-        if (entity.getName() == null || entity.getName().isBlank()) {
-            throw new ValidationException(String.valueOf(idUser));
-        }
-        entity.setOwnerId(idUser);
-        return super.create(entity);
-    }
+    ItemDto update(ItemDto itemDto, long userId);
 
-    public Item update(long userId, long itemId, Item entity) {
-        userService.validateIds(userId);
-        validateIds(itemId);
-        if (getById(itemId).getOwnerId() == userId) {
-            Item item = getById(itemId);
-            item.setName(entity.getName() != null ? entity.getName() : item.getName());
-            item.setRequest(entity.getRequest() != null ? entity.getRequest() : item.getRequest());
-            item.setDescription(entity.getDescription() != null ? entity.getDescription() : item.getDescription());
-            item.setAvailable(entity.getAvailable() != null ? entity.getAvailable() : item.getAvailable());
-            return super.update(item);
-        }
-        throw new NotFoundException(String.valueOf(userId));
-    }
+    void delete(long itemId);
 
-    public List<Item> getFromDescription(long userId, @NonNull String text) {
-        userService.validateIds(userId);
-        if (text.isBlank()) return new ArrayList<>();
-        return itemRepository.getFromDescription(text);
-    }
+    Collection<ItemDto> search(String text, long userId);
 
-    public List<Item> getAll(long userId) {
-        return itemRepository.getAllFromUser(userId);
-    }
-
-    @Override
-    protected String getServiceType() {
-        return Item.class.getSimpleName();
-    }
-
-    @Override
-    protected Repository<Item> getRepository() {
-        return itemRepository;
-    }
+    CommentResponseDto addComment(CommentDto commentDto, long itemId, long userId);
 }
