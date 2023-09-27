@@ -1,7 +1,7 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.model;
 
 import lombok.*;
-import ru.practicum.shareit.item.model.Item;
+import lombok.experimental.Accessors;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
+@Accessors(chain = true)
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

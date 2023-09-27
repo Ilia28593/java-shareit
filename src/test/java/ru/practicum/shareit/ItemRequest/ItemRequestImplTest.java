@@ -8,8 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Fixtures;
 import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.item.ItemService;
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.request.ItemRequestService;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
@@ -25,8 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:test",
-        webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class ItemRequestImplTest {
     private final ItemRequestService itemRequestService;
     private final UserService userService;
@@ -34,17 +32,15 @@ public class ItemRequestImplTest {
     private final ItemRequestDto itemRequestDto = Fixtures.getItemRequestDto();
     private UserDto userDto;
     private UserDto userDto2;
-    private ItemDto itemDto;
 
     @BeforeEach
     private void beforeEach() {
-        userDto = userService.create(Fixtures.getUser1());
-        userDto2 = userService.create(Fixtures.getUser2());
-        itemDto = itemService.create(Fixtures.getItem1(), userDto2.getId());
+        userDto = userService.create(Fixtures.getUser_1());
+        userDto2 = userService.create(Fixtures.getUser_2());
     }
 
     @Test
-    public void itemRequestImpl_Create() {
+    void itemCreate() {
         ItemRequestResponseDto itemRequestResponseDtoSaved =
                 itemRequestService.create(itemRequestDto, userDto.getId());
         assertThat(itemRequestResponseDtoSaved)
@@ -52,34 +48,32 @@ public class ItemRequestImplTest {
     }
 
     @Test
-    public void itemRequestImpl_FindByUserId() {
+    void findByUserId() {
         ItemRequestResponseDto itemRequestResponseDtoSaved =
                 itemRequestService.create(itemRequestDto, userDto.getId());
-        Collection<ItemRequestResponseDto> itemRequestResponseDtos =
+        Collection<ItemRequestResponseDto> itemRequestResponseCollections =
                 itemRequestService.findByUserId(userDto.getId());
-        assertThat(itemRequestResponseDtos).isEqualTo(List.of(itemRequestResponseDtoSaved));
+        assertThat(itemRequestResponseCollections).isEqualTo(List.of(itemRequestResponseDtoSaved));
     }
 
     @Test
-    public void itemRequestImpl_FindAll_Ok() {
+    void findAll() {
         ItemRequestResponseDto itemRequestResponseDtoSaved =
                 itemRequestService.create(itemRequestDto, userDto.getId());
-        Collection<ItemRequestResponseDto> itemRequestResponseDtos =
+        Collection<ItemRequestResponseDto> itemRequestResponseCollections =
                 itemRequestService.findAll(0, Integer.MAX_VALUE, userDto2.getId());
-        assertThat(itemRequestResponseDtos).isEqualTo(List.of(itemRequestResponseDtoSaved));
+        assertThat(itemRequestResponseCollections).isEqualTo(List.of(itemRequestResponseDtoSaved));
     }
 
     @Test
-    public void itemRequestImpl_FindAll_EmptyResult() {
-        ItemRequestResponseDto itemRequestResponseDtoSaved =
-                itemRequestService.create(itemRequestDto, userDto.getId());
-        Collection<ItemRequestResponseDto> itemRequestResponseDtos =
+    void findAllEmpty() {
+        Collection<ItemRequestResponseDto> itemRequestResponseCollections =
                 itemRequestService.findAll(0, Integer.MAX_VALUE, userDto.getId());
-        assertThat(itemRequestResponseDtos).isEqualTo(Collections.emptyList());
+        assertThat(itemRequestResponseCollections).isEqualTo(Collections.emptyList());
     }
 
     @Test
-    public void itemRequestImpl_FindById_Ok() {
+    public void findById() {
         ItemRequestResponseDto itemRequestResponseDtoSaved =
                 itemRequestService.create(itemRequestDto, userDto.getId());
         ItemRequestResponseDto itemRequestResponseDtoById =
@@ -88,7 +82,7 @@ public class ItemRequestImplTest {
     }
 
     @Test
-    public void itemRequestImpl_FindById_WrongIdThrowsError() {
+    public void findByIdfThrows() {
         assertThrows(NotFoundException.class, () -> itemRequestService.findById(-1, userDto.getId()));
     }
 }

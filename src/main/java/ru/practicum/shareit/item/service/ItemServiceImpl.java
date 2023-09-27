@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +11,19 @@ import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.dto.BookingInItemDtoResponse;
 import ru.practicum.shareit.booking.dto.BookingMapper;
+import ru.practicum.shareit.config.Utilities;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.PermissionViolationException;
 import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.CommentRepository;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
-import ru.practicum.shareit.utils.Utilities;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,7 +45,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentMapper commentMapper;
 
     @Override
-    public ItemDtoWithBookingDto getById(long itemId, long userId) {
+    public ItemDtoInBookingDto getById(long itemId, long userId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("item %s not found", itemId)));
         BookingInItemDtoResponse lastBooking = null;
@@ -61,8 +64,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Collection<ItemDtoWithBookingDto> findByUserId(long userId, int from, int size) {
-        Collection<ItemDtoWithBookingDto> itemDtoWithBookingDtos = new ArrayList<>();
+    public Collection<ItemDtoInBookingDto> findByUserId(long userId, int from, int size) {
+        Collection<ItemDtoInBookingDto> itemDtoInBookingDtos = new ArrayList<>();
         Collection<Item> items;
         Pageable pageable = Utilities.getPageable(from, size, Sort.unsorted());
         items = itemRepository.findItemsByOwnerId(userId, pageable);
@@ -75,9 +78,9 @@ public class ItemServiceImpl implements ItemService {
                     .orElse(null);
             Collection<CommentResponseDto> commentsResponseDto = commentMapper
                     .toCommentsResponseDto(commentRepository.findCommentsByItem(item));
-            itemDtoWithBookingDtos.add(itemMapper.toItemDtoWithBookingDto(item, lastBooking, nextBooking, commentsResponseDto));
+            itemDtoInBookingDtos.add(itemMapper.toItemDtoWithBookingDto(item, lastBooking, nextBooking, commentsResponseDto));
         }
-        return itemDtoWithBookingDtos;
+        return itemDtoInBookingDtos;
     }
 
     @Transactional

@@ -3,7 +3,7 @@ package ru.practicum.shareit.item.dto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.item.Comment;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
@@ -16,22 +16,20 @@ import java.util.stream.Collectors;
 public class CommentMapperImpl implements CommentMapper {
     @Override
     public Comment toComment(CommentDto commentDto, Item item, User user) {
-        Comment comment = new Comment();
-        comment.setText(commentDto.getText());
-        comment.setItem(item);
-        comment.setAuthor(user);
-        comment.setCreated(LocalDateTime.now());
-        return comment;
+        return new Comment()
+                .setText(commentDto.getText())
+                .setItem(item)
+                .setAuthor(user)
+                .setCreated(LocalDateTime.now());
     }
 
     @Override
     public CommentResponseDto toCommentResponseDto(Comment comment) {
-        CommentResponseDto commentResponseDto = new CommentResponseDto();
-        commentResponseDto.setId(comment.getId());
-        commentResponseDto.setText(comment.getText());
-        commentResponseDto.setAuthorName(comment.getAuthor().getName());
-        commentResponseDto.setCreated(comment.getCreated());
-        return commentResponseDto;
+        return new CommentResponseDto()
+                .setId(comment.getId())
+                .setText(comment.getText())
+                .setAuthorName(comment.getAuthor().getName())
+                .setCreated(comment.getCreated());
     }
 
     @Override

@@ -23,52 +23,52 @@ public class BookingValidatorTest {
     }
 
     @Test
-    public void bookingValidator_StartDateBeforeNow_Error() {
-        BookingDtoRequest bookingDtoRequest = new BookingDtoRequest();
-        bookingDtoRequest.setItemId(1L);
-        bookingDtoRequest.setStart(LocalDateTime.now().minusDays(1));
-        bookingDtoRequest.setEnd(LocalDateTime.now().plusDays(1));
+    void startDateBeforeNow_Error() {
+        BookingDtoRequest bookingDtoRequest = new BookingDtoRequest()
+                .setItemId(1L)
+                .setStart(LocalDateTime.now().minusDays(1))
+                .setEnd(LocalDateTime.now().plusDays(1));
         Set<ConstraintViolation<BookingDtoRequest>> violations = validator.validate(bookingDtoRequest);
         assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
-    public void bookingValidator_EndDateBeforeStart_Error() {
-        BookingDtoRequest bookingDtoRequest = new BookingDtoRequest();
-        bookingDtoRequest.setItemId(1L);
-        bookingDtoRequest.setStart(LocalDateTime.now().plusDays(2));
-        bookingDtoRequest.setEnd(LocalDateTime.now().plusDays(1));
+    void endDateBeforeStart_Error() {
+        BookingDtoRequest bookingDtoRequest = new BookingDtoRequest()
+                .setItemId(1L)
+                .setStart(LocalDateTime.now().plusDays(2))
+                .setEnd(LocalDateTime.now().plusDays(1));
         Set<ConstraintViolation<BookingDtoRequest>> violations = validator.validate(bookingDtoRequest);
         assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
-    public void bookingValidator_StartAndEndDateAreSame_Error() {
-        BookingDtoRequest bookingDtoRequest = new BookingDtoRequest();
-        bookingDtoRequest.setItemId(1L);
+    void startAndEndDateAreSame_Error() {
         LocalDateTime date = LocalDateTime.now();
-        bookingDtoRequest.setStart(date.plusDays(2));
-        bookingDtoRequest.setEnd(date.plusDays(2));
+        BookingDtoRequest bookingDtoRequest = new BookingDtoRequest()
+                .setItemId(1L)
+                .setStart(date.plusDays(2))
+                .setEnd(date.plusDays(2));
         Set<ConstraintViolation<BookingDtoRequest>> violations = validator.validate(bookingDtoRequest);
         assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
-    public void bookingValidator_StartNull_Error() {
-        BookingDtoRequest bookingDtoRequest = new BookingDtoRequest();
-        bookingDtoRequest.setItemId(1L);
-        bookingDtoRequest.setStart(null);
-        bookingDtoRequest.setEnd(LocalDateTime.now().plusDays(2));
+    void bookingValidator_StartNull_Error() {
+        BookingDtoRequest bookingDtoRequest = new BookingDtoRequest()
+                .setItemId(1L)
+                .setStart(null)
+                .setEnd(LocalDateTime.now().plusDays(2));
         Set<ConstraintViolation<BookingDtoRequest>> violations = validator.validate(bookingDtoRequest);
         assertThat(violations.size()).isEqualTo(1);
     }
 
     @Test
-    public void bookingValidator_EndNull_Error() {
-        BookingDtoRequest bookingDtoRequest = new BookingDtoRequest();
-        bookingDtoRequest.setItemId(1L);
-        bookingDtoRequest.setStart(LocalDateTime.now().plusDays(2));
-        bookingDtoRequest.setEnd(null);
+    void bookingValidator_EndNull_Error() {
+        BookingDtoRequest bookingDtoRequest = new BookingDtoRequest()
+                .setItemId(1L)
+                .setStart(LocalDateTime.now().plusDays(2))
+                .setEnd(null);
         Set<ConstraintViolation<BookingDtoRequest>> violations = validator.validate(bookingDtoRequest);
         assertThat(violations.size()).isEqualTo(1);
     }
