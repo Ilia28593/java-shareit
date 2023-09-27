@@ -28,7 +28,7 @@ public class BookingController {
     public BookingDtoResponse approve(@PathVariable long bookingId,
                                       @RequestParam boolean approved,
                                       @RequestHeader(Constants.HEADER_USER_ID) long userId) {
-        return bookingService.approve(bookingId, approved, userId);
+        return bookingService.approved(bookingId, approved, userId);
     }
 
     @GetMapping("/{bookingId}")

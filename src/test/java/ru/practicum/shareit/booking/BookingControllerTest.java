@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.Fixtures;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
-import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.config.Constants;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
