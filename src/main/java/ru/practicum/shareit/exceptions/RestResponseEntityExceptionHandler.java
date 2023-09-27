@@ -60,7 +60,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         body.put(STATUS, status.value());
         body.put(REASONS, status.getReasonPhrase());
         body.put(PATH, getRequestURI(request));
-        body.put(ERROR, error);
+        body.put(ERROR, "Unknown state: " + error);
         return body;
     }
 
