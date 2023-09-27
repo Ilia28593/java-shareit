@@ -29,8 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:test",
-        webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class ItemServiceImplTest {
     private final ItemService itemService;
     private final UserService userService;
