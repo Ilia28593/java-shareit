@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.service;
+package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,25 +6,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.booking.BookingStatusFilter;
 import ru.practicum.shareit.user.User;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class BookingStateFetchByBookerStrategyCurrent implements BookingStateFetchByBookerStrategy {
+public class BookingStateFetchByBookerStrategyWaiting implements BookingStateFetchByBookerStrategy {
     private final BookingRepository bookingRepository;
 
     @Override
     public BookingStatusFilter getStrategyName() {
-        return BookingStatusFilter.CURRENT;
+        return BookingStatusFilter.WAITING;
     }
 
     @Override
     public Collection<Booking> fetch(User user, Pageable pageable) {
-        return bookingRepository.findBookingsByBookerAndStartBeforeAndEndAfter(
-                user, LocalDateTime.now(), LocalDateTime.now(), pageable);
+        return bookingRepository.findBookingsByBookerAndStatus(user, BookingStatus.WAITING, pageable);
     }
 }
