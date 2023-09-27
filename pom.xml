@@ -227,7 +227,16 @@
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-checkstyle-plugin</artifactId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.19.1</version>
+						<configuration>
+							<printSummary>false</printSummary>
+							<redirectTestOutputToFile>true</redirectTestOutputToFile>
+							<forkCount>3</forkCount>
+							<reuseForks>true</reuseForks>
+							<!--suppress UnresolvedMavenProperty -->
+							<argLine>${surefireArgLine} -Xmx1024m -noverify</argLine>
+						</configuration>
 					</plugin>
 					<plugin>
 						<groupId>com.github.spotbugs</groupId>
