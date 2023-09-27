@@ -1,8 +1,8 @@
 package ru.practicum.shareit.booking.BookingStateFetchByBooker;
 
 import org.springframework.data.domain.Pageable;
+import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingStatusFilter;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.user.User;
 
 import java.util.Collection;
