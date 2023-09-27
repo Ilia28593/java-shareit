@@ -7,15 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Fixtures;
-import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
+import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.PermissionViolationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoWithBookingDto;
+import ru.practicum.shareit.item.dto.ItemDtoInBookingDto;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -28,40 +28,39 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:test",
-        webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest()
 public class ItemServiceImplTest {
-    private final ItemService itemService;
+    private final ru.practicum.shareit.item.ItemService itemService;
     private final UserService userService;
     private final BookingService bookingService;
-    private final ItemDto itemDto = Fixtures.getItem1();
-    private final ItemDto itemDto2 = Fixtures.getItem2();
-    private final CommentDto commentDto = Fixtures.getComment();
+    private final ItemDto itemDto = Fixtures.getItem_1();
+    private final ItemDto itemDto2 = Fixtures.getItem_2();
+    private final CommentDto commentDto = Fixtures.getComment_1();
     private UserDto userDto;
     private UserDto userDto2;
 
     @BeforeEach
     public void beforeEach() {
-        userDto = userService.create(Fixtures.getUser1());
-        userDto2 = userService.create(Fixtures.getUser2());
+        userDto = userService.create(Fixtures.getUser_1());
+        userDto2 = userService.create(Fixtures.getUser_2());
     }
 
     @Test
-    public void itemServiceImpl_Save_ResponseIsValid() {
+    void save() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         itemDto.setId(savedItemDto.getId());
         assertThat(itemDto).isEqualTo(savedItemDto);
     }
 
     @Test
-    public void itemServiceImpl_SaveAndGetById_AreSame() {
+    void saveAndGetById() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
-        ItemDtoWithBookingDto getByIdItemDtoWithBookingDto = itemService.getById(savedItemDto.getId(), userDto.getId());
-        assertThat(getByIdItemDtoWithBookingDto).isEqualTo(Fixtures.getItemResponse1(getByIdItemDtoWithBookingDto.getId()));
+        ItemDtoInBookingDto getByIdItemDtoInBookingDto = itemService.getById(savedItemDto.getId(), userDto.getId());
+        assertThat(getByIdItemDtoInBookingDto).isEqualTo(Fixtures.getResponseItem_1(getByIdItemDtoInBookingDto.getId()));
     }
 
     @Test
-    public void itemServiceImpl_Update_IsUpdated() {
+    void update() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         savedItemDto.setName(savedItemDto.getName() + "test");
         savedItemDto.setDescription(savedItemDto.getDescription() + "test");
@@ -70,29 +69,29 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    public void itemServiceImpl_Update_ThrowsErrorPermissionViolation() {
+    void updateThrows() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         assertThrows(PermissionViolationException.class,
                 () -> itemService.update(savedItemDto, userDto2.getId()));
     }
 
     @Test
-    public void itemServiceImpl_Delete_GetByIdRaiseError() {
+    void delete() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         itemService.delete(savedItemDto.getId());
         assertThrows(NotFoundException.class, () -> itemService.getById(savedItemDto.getId(), userDto.getId()));
     }
 
     @Test
-    public void itemServiceImpl_FindByUserId_CorrectResult() {
+    void findByUserId() {
         ItemDto savedItemDto1 = itemService.create(itemDto, userDto.getId());
         ItemDto savedItemDto2 = itemService.create(itemDto2, userDto2.getId());
         assertThat(itemService.findByUserId(userDto.getId(), 0, Integer.MAX_VALUE))
-                .isEqualTo(List.of(Fixtures.getItemResponse1(savedItemDto1.getId())));
+                .isEqualTo(List.of(Fixtures.getResponseItem_1(savedItemDto1.getId())));
     }
 
     @Test
-    public void itemServiceImpl_Search_CorrectResult() {
+    void search() {
         ItemDto savedItemDto1 = itemService.create(itemDto, userDto.getId());
         ItemDto savedItemDto2 = itemService.create(itemDto2, userDto2.getId());
         assertThat(itemService.search(savedItemDto1.getName(), userDto.getId(), 0, Integer.MAX_VALUE))
@@ -100,21 +99,20 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    public void itemServiceImpl_AddCommentWithNoBooking_ThrowBadRequest() {
+    void addCommentWithNoBooking() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         assertThrows(BadRequestException.class,
                 () -> itemService.addComment(commentDto, savedItemDto.getId(), userDto.getId()));
     }
 
     @Test
-    public void itemServiceImpl_AddCommentWithNoBooking_Ok() {
+    void addCommentWithNoBookingOk() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
-        BookingDtoRequest bookingDtoRequest = Fixtures.getBooking(savedItemDto.getId());
-        bookingDtoRequest.setStart(LocalDateTime.now().minusDays(5));
-        bookingDtoRequest.setEnd(LocalDateTime.now().minusDays(4));
-        BookingDtoResponse bookingDtoResponse =
-                bookingService.create(bookingDtoRequest, userDto2.getId());
-        bookingService.approve(bookingDtoResponse.getId(), true, userDto.getId());
+        BookingDtoRequest bookingDtoRequest = Fixtures.getBooking(savedItemDto.getId())
+                .setStart(LocalDateTime.now().minusDays(5))
+                .setEnd(LocalDateTime.now().minusDays(4));
+        BookingDtoResponse bookingDtoResponse = bookingService.create(bookingDtoRequest, userDto2.getId());
+        bookingService.approved(bookingDtoResponse.getId(), true, userDto.getId());
         assertDoesNotThrow(() -> itemService.addComment(commentDto, savedItemDto.getId(), userDto2.getId()));
     }
 }

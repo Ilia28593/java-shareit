@@ -6,7 +6,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
-import ru.practicum.shareit.utils.Constants;
+import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.config.Constants;
 
 import javax.validation.constraints.Min;
 import java.util.Collection;
@@ -28,7 +29,7 @@ public class BookingController {
     public BookingDtoResponse approve(@PathVariable long bookingId,
                                       @RequestParam boolean approved,
                                       @RequestHeader(Constants.HEADER_USER_ID) long userId) {
-        return bookingService.approve(bookingId, approved, userId);
+        return bookingService.approved(bookingId, approved, userId);
     }
 
     @GetMapping("/{bookingId}")

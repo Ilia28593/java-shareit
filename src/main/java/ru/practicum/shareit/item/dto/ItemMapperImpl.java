@@ -34,21 +34,21 @@ public class ItemMapperImpl implements ItemMapper {
     }
 
     @Override
-    public ItemDtoWithBookingDto toItemDtoWithBookingDto(Item item, BookingInItemDtoResponse lastBooking,
-                                                         BookingInItemDtoResponse nextBooking,
-                                                         Collection<CommentResponseDto> comments) {
-        ItemDtoWithBookingDto itemDtoWithBookingDto = new ItemDtoWithBookingDto();
-        itemDtoWithBookingDto.setId(item.getId());
-        itemDtoWithBookingDto.setName(item.getName());
-        itemDtoWithBookingDto.setDescription(item.getDescription());
-        itemDtoWithBookingDto.setAvailable(item.getAvailable());
-        itemDtoWithBookingDto.setLastBooking(lastBooking);
-        itemDtoWithBookingDto.setNextBooking(nextBooking);
-        itemDtoWithBookingDto.setComments(comments);
+    public ItemDtoInBookingDto toItemDtoWithBookingDto(Item item, BookingInItemDtoResponse lastBooking,
+                                                       BookingInItemDtoResponse nextBooking,
+                                                       Collection<CommentResponseDto> comments) {
+        ItemDtoInBookingDto itemDtoInBookingDto = new ItemDtoInBookingDto();
+        itemDtoInBookingDto.setId(item.getId());
+        itemDtoInBookingDto.setName(item.getName());
+        itemDtoInBookingDto.setDescription(item.getDescription());
+        itemDtoInBookingDto.setAvailable(item.getAvailable());
+        itemDtoInBookingDto.setLastBooking(lastBooking);
+        itemDtoInBookingDto.setNextBooking(nextBooking);
+        itemDtoInBookingDto.setComments(comments);
         if (item.getItemRequest() != null) {
-            itemDtoWithBookingDto.setRequestId(item.getItemRequest().getId());
+            itemDtoInBookingDto.setRequestId(item.getItemRequest().getId());
         }
-        return itemDtoWithBookingDto;
+        return itemDtoInBookingDto;
     }
 
     @Override

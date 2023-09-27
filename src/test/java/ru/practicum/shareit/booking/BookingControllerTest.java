@@ -11,11 +11,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.Fixtures;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
+import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.config.Constants;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.utils.Constants;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -27,10 +28,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.practicum.shareit.config.Constants.HEADER_USER_ID;
 
 @WebMvcTest(controllers = BookingController.class)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class BookingControllerTest {
+class BookingControllerTest {
     private final MockMvc mvc;
     private final ObjectMapper mapper;
     @MockBean
@@ -39,17 +41,13 @@ public class BookingControllerTest {
     private final BookingDtoResponse bookingDtoResponse = Fixtures.getBookingResponse(1, 1L);
 
     @Test
-    public void bookingService_Create() throws Exception {
+    void create() throws Exception {
         when(bookingService.create(any(), anyLong()))
                 .thenReturn(bookingDtoResponse);
-
         mvc.perform(post("/bookings")
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(HEADER_USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(bookingDtoResponse.getId()), Long.class))
                 .andExpect(jsonPath("$.start", is(bookingDtoResponse.getStart().format(ISO_LOCAL_DATE_TIME))))
@@ -60,16 +58,14 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void bookingService_Approve() throws Exception {
-        when(bookingService.approve(anyLong(), anyBoolean(), anyLong()))
+    void approve() throws Exception {
+        when(bookingService.approved(anyLong(), anyBoolean(), anyLong()))
                 .thenReturn(bookingDtoResponse);
 
         mvc.perform(patch("/bookings/{bookingId}?approved=true", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
+                        .header(HEADER_USER_ID, 1)
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(bookingDtoResponse.getId()), Long.class))
@@ -81,17 +77,13 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void bookingService_GetById() throws Exception {
+    void getById() throws Exception {
         when(bookingService.getById(anyLong(), anyLong()))
                 .thenReturn(bookingDtoResponse);
-
         mvc.perform(get("/bookings/{bookingId}", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(HEADER_USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(bookingDtoResponse.getId()), Long.class))
                 .andExpect(jsonPath("$.start", is(bookingDtoResponse.getStart().format(ISO_LOCAL_DATE_TIME))))
@@ -102,47 +94,36 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void bookingService_GetById_IsNotFound() throws Exception {
+    void getByIdIsNotFound() throws Exception {
         when(bookingService.getById(anyLong(), anyLong()))
                 .thenThrow(NotFoundException.class);
-
         mvc.perform(get("/bookings/{bookingId}", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(HEADER_USER_ID, 1))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void bookingService_GetById_IsBadRequest() throws Exception {
+    void getByIdIsBadRequest() throws Exception {
         when(bookingService.getById(anyLong(), anyLong()))
                 .thenThrow(BadRequestException.class);
-
         mvc.perform(get("/bookings/{bookingId}", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(HEADER_USER_ID, 1))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void bookingService_GetById_StringInsteadOfInt_IsBadRequest() throws Exception {
+    void getByIdInsteadOfIntIsBadRequest() throws Exception {
         when(bookingService.getById(anyLong(), anyLong()))
                 .thenThrow(BadRequestException.class);
-
         mvc.perform(get("/bookings/{bookingId}", "NOT_ID")
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(HEADER_USER_ID, 1))
                 .andExpect(status().isBadRequest());
     }
 
@@ -166,14 +147,10 @@ public class BookingControllerTest {
     public void bookingService_GetAllByBookerId_BadRequest() throws Exception {
         when(bookingService.getAllByBookerId(any(), anyLong(), anyInt(), anyInt()))
                 .thenReturn(List.of(bookingDtoResponse, bookingDtoResponse));
-
         mvc.perform(get("/bookings?state=UNKNOWN-STATE", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(HEADER_USER_ID, 1))
                 .andExpect(status().isBadRequest());
     }
 

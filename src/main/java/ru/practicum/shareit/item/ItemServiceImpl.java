@@ -6,8 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.dto.BookingInItemDtoResponse;
 import ru.practicum.shareit.booking.dto.BookingMapper;
@@ -20,7 +20,7 @@ import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
-import ru.practicum.shareit.utils.Utilities;
+import ru.practicum.shareit.config.Utilities;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentMapper commentMapper;
 
     @Override
-    public ItemDtoWithBookingDto getById(long itemId, long userId) {
+    public ItemDtoInBookingDto getById(long itemId, long userId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("item %s not found", itemId)));
         BookingInItemDtoResponse lastBooking = null;
@@ -61,8 +61,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Collection<ItemDtoWithBookingDto> findByUserId(long userId, int from, int size) {
-        Collection<ItemDtoWithBookingDto> itemDtoWithBookingDtos = new ArrayList<>();
+    public Collection<ItemDtoInBookingDto> findByUserId(long userId, int from, int size) {
+        Collection<ItemDtoInBookingDto> itemDtoInBookingDtos = new ArrayList<>();
         Collection<Item> items;
         Pageable pageable = Utilities.getPageable(from, size, Sort.unsorted());
         items = itemRepository.findItemsByOwnerId(userId, pageable);
@@ -75,9 +75,9 @@ public class ItemServiceImpl implements ItemService {
                     .orElse(null);
             Collection<CommentResponseDto> commentsResponseDto = commentMapper
                     .toCommentsResponseDto(commentRepository.findCommentsByItem(item));
-            itemDtoWithBookingDtos.add(itemMapper.toItemDtoWithBookingDto(item, lastBooking, nextBooking, commentsResponseDto));
+            itemDtoInBookingDtos.add(itemMapper.toItemDtoWithBookingDto(item, lastBooking, nextBooking, commentsResponseDto));
         }
-        return itemDtoWithBookingDtos;
+        return itemDtoInBookingDtos;
     }
 
     @Transactional

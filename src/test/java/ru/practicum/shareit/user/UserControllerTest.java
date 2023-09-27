@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.Fixtures;
 import ru.practicum.shareit.user.dto.UserDto;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,23 +24,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = UserController.class)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class UserControllerTest {
+class UserControllerTest {
     private final MockMvc mvc;
     private final ObjectMapper mapper;
-    private final UserDto userDto = Fixtures.getUser1();
-    private final Collection<UserDto> userDtos = List.of(Fixtures.getUser1(), Fixtures.getUser2());
+    private final UserDto userDto = Fixtures.getUser_1();
+    private final Collection<UserDto> userList = List.of(Fixtures.getUser_1(), Fixtures.getUser_2());
     @MockBean
     private UserService userService;
 
     @Test
-    void userController_GetById() throws Exception {
+    void getById() throws Exception {
         when(userService.getById(anyLong())).thenReturn(userDto);
-
         mvc.perform(get("/users/{userId}", userDto.getId().toString())
                         .content(mapper.writeValueAsString(userDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(userDto.getName())))
@@ -50,27 +46,21 @@ public class UserControllerTest {
     }
 
     @Test
-    void userController_GetAll() throws Exception {
-        when(userService.getAll()).thenReturn(userDtos);
-
+    void getAll() throws Exception {
+        when(userService.getAll()).thenReturn(userList);
         mvc.perform(get("/users", userDto.getId().toString())
                         .content(mapper.writeValueAsString(userDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(2)));
     }
 
     @Test
-    void userController_CreateUser() throws Exception {
+    void createUser() throws Exception {
         when(userService.create(any())).thenReturn(userDto);
-
         mvc.perform(post("/users")
                         .content(mapper.writeValueAsString(userDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(userDto.getName())))
@@ -78,14 +68,11 @@ public class UserControllerTest {
     }
 
     @Test
-    void userController_UpdateUser() throws Exception {
+    void updateUser() throws Exception {
         when(userService.update(any())).thenReturn(userDto);
-
         mvc.perform(patch("/users/{userId}", userDto.getId().toString())
                         .content(mapper.writeValueAsString(userDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(userDto.getName())))
@@ -93,12 +80,10 @@ public class UserControllerTest {
     }
 
     @Test
-    void userController_Delete() throws Exception {
+    void deletes() throws Exception {
         mvc.perform(delete("/users/{userId}", userDto.getId().toString())
                         .content(mapper.writeValueAsString(userDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }
