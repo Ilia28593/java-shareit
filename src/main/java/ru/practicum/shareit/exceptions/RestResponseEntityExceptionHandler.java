@@ -30,7 +30,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<Object> handleMethodMismatch(MethodArgumentTypeMismatchException ex, WebRequest request) {
         Map<String, Object> body;
-        Throwable cause = ex.getCause().getCause();
+        Throwable cause = ex.getCause() // First cause is a ConversionException
+                .getCause(); // Second Cause is your custom exception or some other exception e.g. NullPointerException
         if (Objects.equals(cause.getClass(), UnsupportedBookingStatusFilterException.class)) {
             body = getErrorBody(HttpStatus.BAD_REQUEST, request, cause.getMessage());
         } else {
