@@ -10,6 +10,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoInBookingDto;
 import ru.practicum.shareit.config.Constants;
 import ru.practicum.shareit.config.Create;
+import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.constraints.Min;
 import java.util.Collection;

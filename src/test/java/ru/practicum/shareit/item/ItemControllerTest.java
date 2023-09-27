@@ -13,6 +13,7 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoInBookingDto;
+import ru.practicum.shareit.item.service.ItemService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,7 +37,7 @@ public class ItemControllerTest {
     private final ItemDtoInBookingDto itemResponseDto = Fixtures.getResponseItem_1(1L);
     private final ItemDtoInBookingDto itemResponseDto2 = Fixtures.getResponseItem_2(2L);
     @MockBean
-    private final ru.practicum.shareit.item.ItemService itemService;
+    private final ItemService itemService;
 
     @Test
     void getById() throws Exception {
