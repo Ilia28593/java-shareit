@@ -251,6 +251,22 @@
 					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
+						<executions>
+							<!-- prepare agent for measuring unit tests -->
+							<execution>
+								<id>prepare-unit-tests</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+								<configuration>
+									<append>true</append>
+									<!--suppress UnresolvedMavenProperty -->
+									<destFile>${sonar.jacoco.reportPath}</destFile>
+									<!-- Sets the VM argument line used when unit tests are run. -->
+									<propertyName>surefireArgLine</propertyName>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
