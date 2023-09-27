@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingInItemDtoResponse;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -15,37 +17,48 @@ public class ItemMapperImpl implements ItemMapper {
 
     @Override
     public ItemDto toItemDto(Item item) {
-        ItemDto itemDto = new ItemDto();
-        itemDto.setId(item.getId());
-        itemDto.setName(item.getName());
-        itemDto.setDescription(item.getDescription());
-        itemDto.setAvailable(item.getAvailable());
+        ItemDto itemDto = new ItemDto()
+                .setId(item.getId())
+                .setName(item.getName())
+                .setDescription(item.getDescription())
+                .setAvailable(item.getAvailable());
+        if (item.getItemRequest() != null) {
+            itemDto.setRequestId(item.getItemRequest().getId());
+        }
         return itemDto;
     }
 
     @Override
-    public ItemDtoWithBookingDto toItemDtoWithBookingDto(Item item, BookingInItemDtoResponse lastBooking,
-                                                         BookingInItemDtoResponse nextBooking,
-                                                         Collection<CommentResponseDto> comments) {
-        ItemDtoWithBookingDto itemDtoWithBookingDto = new ItemDtoWithBookingDto();
-        itemDtoWithBookingDto.setId(item.getId());
-        itemDtoWithBookingDto.setName(item.getName());
-        itemDtoWithBookingDto.setDescription(item.getDescription());
-        itemDtoWithBookingDto.setAvailable(item.getAvailable());
-        itemDtoWithBookingDto.setLastBooking(lastBooking);
-        itemDtoWithBookingDto.setNextBooking(nextBooking);
-        itemDtoWithBookingDto.setComments(comments);
-        return itemDtoWithBookingDto;
+    public Collection<ItemDto> toItemDtos(Collection<Item> items) {
+        return items.stream().map(this::toItemDto).collect(Collectors.toList());
     }
 
     @Override
-    public Item toItem(ItemDto itemDto, User user) {
-        Item item = new Item();
-        item.setId(itemDto.getId());
-        item.setName(itemDto.getName());
-        item.setDescription(itemDto.getDescription());
-        item.setAvailable(itemDto.getAvailable());
-        item.setOwner(user);
-        return item;
+    public ItemDtoInBookingDto toItemDtoWithBookingDto(Item item, BookingInItemDtoResponse lastBooking,
+                                                       BookingInItemDtoResponse nextBooking,
+                                                       Collection<CommentResponseDto> comments) {
+        ItemDtoInBookingDto itemDtoByBookingDto = new ItemDtoInBookingDto()
+                .setId(item.getId())
+                .setName(item.getName())
+                .setDescription(item.getDescription())
+                .setAvailable(item.getAvailable())
+                .setLastBooking(lastBooking)
+                .setNextBooking(nextBooking)
+                .setComments(comments);
+        if (item.getItemRequest() != null) {
+            itemDtoByBookingDto.setRequestId(item.getItemRequest().getId());
+        }
+        return itemDtoByBookingDto;
+    }
+
+    @Override
+    public Item toItem(ItemDto itemDto, User user, ItemRequest itemRequest) {
+        return new Item()
+                .setId(itemDto.getId())
+                .setName(itemDto.getName())
+                .setDescription(itemDto.getDescription())
+                .setAvailable(itemDto.getAvailable())
+                .setOwner(user)
+                .setItemRequest(itemRequest);
     }
 }

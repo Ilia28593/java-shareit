@@ -8,29 +8,31 @@ import ru.practicum.shareit.config.Create;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoWithBookingDto;
-import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.item.dto.ItemDtoInBookingDto;
 
+import javax.validation.constraints.Min;
 import java.util.Collection;
 
-import static ru.practicum.shareit.config.Constants.HEADER_USER_ID;
+import static ru.practicum.shareit.config.Constants.*;
 
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemController {
 
-    private final ItemService itemService;
+    private final ru.practicum.shareit.item.ItemService itemService;
 
     @GetMapping("/{itemId}")
-    public ItemDtoWithBookingDto getById(@PathVariable long itemId, @RequestHeader(HEADER_USER_ID) long userId) {
+    public ItemDtoInBookingDto getById(@PathVariable long itemId, @RequestHeader(HEADER_USER_ID) long userId) {
         return itemService.getById(itemId, userId);
     }
 
 
     @GetMapping
-    public Collection<ItemDtoWithBookingDto> findByUserId(@RequestHeader(HEADER_USER_ID) long userId) {
-        return itemService.findByUserId(userId);
+    public Collection<ItemDtoInBookingDto> findByUserId(@RequestHeader(HEADER_USER_ID) long userId,
+                                                        @RequestParam(defaultValue = PAGE_DEF) @Min(0) int from,
+                                                        @RequestParam(defaultValue = PAGE_DEF_SIZE) @Min(1) int size) {
+        return itemService.findByUserId(userId, from, size);
     }
 
     @PostMapping
@@ -53,8 +55,10 @@ public class ItemController {
 
     @GetMapping("/search")
     public Collection<ItemDto> search(@RequestParam String text,
-                                      @RequestHeader(HEADER_USER_ID) long userId) {
-        return itemService.search(text, userId);
+                                      @RequestHeader(HEADER_USER_ID) long userId,
+                                      @RequestParam(defaultValue = PAGE_DEF) @Min(0) int from,
+                                      @RequestParam(defaultValue = PAGE_DEF_SIZE) @Min(1) int size) {
+        return itemService.search(text, userId, from, size);
     }
 
     @PostMapping("/{itemId}/comment")

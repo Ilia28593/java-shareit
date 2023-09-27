@@ -7,8 +7,6 @@ import ru.practicum.shareit.user.User;
 import java.util.Collection;
 
 public interface CommentMapper {
-    CommentDto toCommentDto(Comment comment);
-
     Comment toComment(CommentDto commentDto, Item item, User user);
 
     CommentResponseDto toCommentResponseDto(Comment comment);

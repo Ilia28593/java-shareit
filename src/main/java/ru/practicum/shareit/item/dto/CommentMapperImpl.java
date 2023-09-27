@@ -15,13 +15,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CommentMapperImpl implements CommentMapper {
     @Override
-    public CommentDto toCommentDto(Comment comment) {
-        CommentDto commentDto = new CommentDto();
-        commentDto.setText(commentDto.getText());
-        return commentDto;
-    }
-
-    @Override
     public Comment toComment(CommentDto commentDto, Item item, User user) {
         return new Comment()
                 .setText(commentDto.getText())

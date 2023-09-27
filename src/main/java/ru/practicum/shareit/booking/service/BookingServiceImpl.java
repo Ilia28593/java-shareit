@@ -5,21 +5,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.BookingStatus;
-import ru.practicum.shareit.booking.BookingStatusFilter;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.booking.dto.BookingResponseDTO;
+import ru.practicum.shareit.booking.dto.BookingDtoRequest;
+import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.booking.model.BookingStatusFilter;
+import ru.practicum.shareit.booking.reposotory.BookingRepository;
+import ru.practicum.shareit.config.Utilities;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.PermissionViolationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.config.Utilities;
-import ru.practicum.shareit.user.service.UserServiceImpl;
+import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.UserServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -39,7 +39,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingStateFetchBookerStrategyFactory bookingStateFetchBookerStrategyFactory;
 
     @Override
-    public BookingResponseDTO create(BookingRequestDto bookingRequestDto, long userId) {
+    public BookingDtoResponse create(BookingDtoRequest bookingRequestDto, long userId) {
         User user = userService.findById(userId);
         Item item = itemService.findById(bookingRequestDto.getItemId());
         if (!item.getAvailable()) {
@@ -53,7 +53,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponseDTO approved(long bookingId, boolean approved, long userId) {
+    public BookingDtoResponse approved(long bookingId, boolean approved, long userId) {
         Booking booking = findById(bookingId);
         if (booking.getItem().getOwner().getId() != userId) {
             throw new PermissionViolationException("Only item owner can approve booking");
@@ -66,7 +66,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponseDTO getById(long bookingId, long userId) {
+    public BookingDtoResponse getById(long bookingId, long userId) {
         User user = userService.findById(userId);
         Booking booking = findById(bookingId);
         if (!Objects.equals(booking.getBooker(), user) && !Objects.equals(booking.getItem().getOwner(), user)) {
@@ -76,7 +76,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<BookingResponseDTO> getAllByBookerId(BookingStatusFilter state, long userId, int from, int size) {
+    public Collection<BookingDtoResponse> getAllByBookerId(BookingStatusFilter state, long userId, int from, int size) {
         User user = userService.findById(userId);
         Pageable pageable = Utilities.getPageable(from, size, Sort.by("start").descending());
         Collection<Booking> bookings = bookingStateFetchBookerStrategyFactory.findStrategy(state).fetch(user, pageable);
@@ -84,7 +84,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<BookingResponseDTO> getAllByItemOwnerId(BookingStatusFilter state, long userId, int from, int size) {
+    public Collection<BookingDtoResponse> getAllByItemOwnerId(BookingStatusFilter state, long userId, int from, int size) {
         User user = userService.findById(userId);
         Collection<Booking> bookings;
         Pageable pageable = Utilities.getPageable(from, size, Sort.by("start").descending());
@@ -115,7 +115,7 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
     }
 
-    public Booking findById(long bookingId){
+    public Booking findById(long bookingId) {
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException(BOOKING_NO_FOUND_BY_ID + bookingId));
     }

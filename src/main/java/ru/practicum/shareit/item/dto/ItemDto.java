@@ -1,9 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.Accessors;
 import ru.practicum.shareit.config.Create;
 
 import javax.validation.constraints.NotEmpty;
@@ -13,6 +11,9 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
+@ToString
+@Accessors(chain = true)
 public class ItemDto {
     private Long id;
     @NotEmpty(message = "name can not be empty", groups = {Create.class})
@@ -23,4 +24,5 @@ public class ItemDto {
     private String description;
     @NotNull(message = "available can not be empty", groups = {Create.class})
     private Boolean available;
+    private Long requestId;
 }

@@ -1,11 +1,11 @@
 package ru.practicum.shareit.booking.model;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 
@@ -16,15 +16,14 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
+@Accessors(chain = true)
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "start_date")
-    @NotNull
     private LocalDateTime start;
     @Column(name = "end_date")
-    @NotNull
     private LocalDateTime end;
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude

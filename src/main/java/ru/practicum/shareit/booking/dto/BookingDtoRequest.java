@@ -1,8 +1,7 @@
 package ru.practicum.shareit.booking.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -10,9 +9,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @BookingValid
+@EqualsAndHashCode
+@ToString
+@Accessors(chain = true)
 public class BookingDtoRequest {
-    @NotNull
     private Long itemId;
     @NotNull
     private LocalDateTime start;
