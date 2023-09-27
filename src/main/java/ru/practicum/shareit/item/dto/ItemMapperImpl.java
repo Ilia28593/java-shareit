@@ -17,11 +17,11 @@ public class ItemMapperImpl implements ItemMapper {
 
     @Override
     public ItemDto toItemDto(Item item) {
-        ItemDto itemDto = new ItemDto();
-        itemDto.setId(item.getId());
-        itemDto.setName(item.getName());
-        itemDto.setDescription(item.getDescription());
-        itemDto.setAvailable(item.getAvailable());
+        ItemDto itemDto = new ItemDto()
+                .setId(item.getId())
+                .setName(item.getName())
+                .setDescription(item.getDescription())
+                .setAvailable(item.getAvailable());
         if (item.getItemRequest() != null) {
             itemDto.setRequestId(item.getItemRequest().getId());
         }
@@ -37,29 +37,28 @@ public class ItemMapperImpl implements ItemMapper {
     public ItemDtoInBookingDto toItemDtoWithBookingDto(Item item, BookingInItemDtoResponse lastBooking,
                                                        BookingInItemDtoResponse nextBooking,
                                                        Collection<CommentResponseDto> comments) {
-        ItemDtoInBookingDto itemDtoInBookingDto = new ItemDtoInBookingDto();
-        itemDtoInBookingDto.setId(item.getId());
-        itemDtoInBookingDto.setName(item.getName());
-        itemDtoInBookingDto.setDescription(item.getDescription());
-        itemDtoInBookingDto.setAvailable(item.getAvailable());
-        itemDtoInBookingDto.setLastBooking(lastBooking);
-        itemDtoInBookingDto.setNextBooking(nextBooking);
-        itemDtoInBookingDto.setComments(comments);
+        ItemDtoInBookingDto itemDtoByBookingDto = new ItemDtoInBookingDto()
+                .setId(item.getId())
+                .setName(item.getName())
+                .setDescription(item.getDescription())
+                .setAvailable(item.getAvailable())
+                .setLastBooking(lastBooking)
+                .setNextBooking(nextBooking)
+                .setComments(comments);
         if (item.getItemRequest() != null) {
-            itemDtoInBookingDto.setRequestId(item.getItemRequest().getId());
+            itemDtoByBookingDto.setRequestId(item.getItemRequest().getId());
         }
-        return itemDtoInBookingDto;
+        return itemDtoByBookingDto;
     }
 
     @Override
     public Item toItem(ItemDto itemDto, User user, ItemRequest itemRequest) {
-        Item item = new Item();
-        item.setId(itemDto.getId());
-        item.setName(itemDto.getName());
-        item.setDescription(itemDto.getDescription());
-        item.setAvailable(itemDto.getAvailable());
-        item.setOwner(user);
-        item.setItemRequest(itemRequest);
-        return item;
+        return new Item()
+                .setId(itemDto.getId())
+                .setName(itemDto.getName())
+                .setDescription(itemDto.getDescription())
+                .setAvailable(itemDto.getAvailable())
+                .setOwner(user)
+                .setItemRequest(itemRequest);
     }
 }

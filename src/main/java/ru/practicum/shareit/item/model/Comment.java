@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.model;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;

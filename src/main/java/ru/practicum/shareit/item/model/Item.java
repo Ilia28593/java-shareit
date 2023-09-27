@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
+@Accessors(chain = true)
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
