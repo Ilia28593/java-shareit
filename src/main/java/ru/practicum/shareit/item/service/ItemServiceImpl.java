@@ -23,8 +23,8 @@ import ru.practicum.shareit.item.reposotory.CommentRepository;
 import ru.practicum.shareit.item.reposotory.ItemRepository;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.service.ItemRequestServiceImpl;
-import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserServiceImpl;
+import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
