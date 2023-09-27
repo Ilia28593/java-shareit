@@ -60,6 +60,7 @@ public class ItemServiceImplTest {
         assertThat(getByIdItemDtoWithBookingDto).isEqualTo(Fixtures.getItemResponse1(getByIdItemDtoWithBookingDto.getId()));
     }
 
+
     @Test
     public void itemServiceImpl_Update_IsUpdated() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
