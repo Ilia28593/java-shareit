@@ -93,7 +93,7 @@ public class Samples {
                 .setStatus(BookingStatus.WAITING)
                 .setBooker(getUser1())
                 .setStart(getBooking(itemId).getStart())
-                .setStart(getBooking(itemId).getEnd());
+                .setEnd(getBooking(itemId).getEnd());
     }
 
     public static ItemRequestResponseDto getItemRequestResponseDto(long id, Collection<ItemDto> itemDtos, LocalDateTime created) {
