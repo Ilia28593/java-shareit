@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.dto;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import ru.practicum.shareit.utils.Create;
 import ru.practicum.shareit.utils.Update;
 
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Accessors(chain = true)
 public class UserDto {
     private Long id;
     private String name;

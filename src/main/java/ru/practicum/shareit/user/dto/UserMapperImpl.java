@@ -12,10 +12,9 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public User toUser(UserDto userDto) {
-        User user = new User();
-        user.setId(userDto.getId());
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        return user;
+        return new User()
+                .setId(userDto.getId())
+                .setName(userDto.getName())
+                .setEmail(userDto.getEmail());
     }
 }

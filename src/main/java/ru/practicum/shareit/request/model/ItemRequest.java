@@ -1,6 +1,7 @@
-package ru.practicum.shareit.request;
+package ru.practicum.shareit.request.model;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -15,6 +16,7 @@ import java.util.Collection;
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
+@Accessors(chain = true)
 public class ItemRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
