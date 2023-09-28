@@ -42,17 +42,13 @@ public class ItemRequestControllerTest {
     private final ItemRequestDto itemRequestDto = Fixtures.getItemRequestDto();
 
     @Test
-    public void itemRequestController_Create() throws Exception {
+    public void create() throws Exception {
         when(itemRequestService.create(any(), anyLong()))
                 .thenReturn(itemRequestResponseDto);
-
         mvc.perform(post("/requests")
                         .content(mapper.writeValueAsString(itemRequestDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(Constants.HEADER_USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestResponseDto.getId()), Long.class))
                 .andExpect(jsonPath("$.description", is(itemRequestResponseDto.getDescription())))
@@ -60,46 +56,34 @@ public class ItemRequestControllerTest {
     }
 
     @Test
-    public void itemRequestController_FindByUserId() throws Exception {
+    public void findByUserId() throws Exception {
         when(itemRequestService.findByUserId(anyLong()))
                 .thenReturn(List.of(itemRequestResponseDto, itemRequestResponseDto));
-
         mvc.perform(get("/requests?from=0&size=2")
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(Constants.HEADER_USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(2)));
     }
 
     @Test
-    public void itemRequestController_FindAll() throws Exception {
+    public void findAll() throws Exception {
         when(itemRequestService.findAll(anyInt(), anyInt(), anyLong()))
                 .thenReturn(List.of(itemRequestResponseDto, itemRequestResponseDto));
-
         mvc.perform(get("/requests/all?from=0&size=2")
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(Constants.HEADER_USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(2)));
     }
 
     @Test
-    public void itemRequestController_FindRequestById() throws Exception {
+    public void findRequestById() throws Exception {
         when(itemRequestService.findById(anyLong(), anyLong()))
                 .thenReturn(itemRequestResponseDto);
-
         mvc.perform(get("/requests/{requestId}", 1)
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(Constants.HEADER_USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestResponseDto.getId()), Long.class))
                 .andExpect(jsonPath("$.description", is(itemRequestResponseDto.getDescription())))

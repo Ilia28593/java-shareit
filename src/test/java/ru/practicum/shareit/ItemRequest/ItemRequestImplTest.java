@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Fixtures;
 import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.request.ItemRequestService;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
@@ -29,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ItemRequestImplTest {
     private final ItemRequestService itemRequestService;
     private final UserService userService;
-    private final ItemService itemService;
     private final ItemRequestDto itemRequestDto = Fixtures.getItemRequestDto();
     private UserDto userDto;
     private UserDto userDto2;
@@ -41,7 +39,7 @@ public class ItemRequestImplTest {
     }
 
     @Test
-    public void itemRequestImpl_Create() {
+    public void create() {
         ItemRequestResponseDto itemRequestResponseDtoSaved =
                 itemRequestService.create(itemRequestDto, userDto.getId());
         assertThat(itemRequestResponseDtoSaved)
@@ -49,7 +47,7 @@ public class ItemRequestImplTest {
     }
 
     @Test
-    public void itemRequestImpl_FindByUserId() {
+    public void findByUserId() {
         ItemRequestResponseDto itemRequestResponseDtoSaved =
                 itemRequestService.create(itemRequestDto, userDto.getId());
         Collection<ItemRequestResponseDto> itemRequestResponseDtos =
@@ -58,7 +56,7 @@ public class ItemRequestImplTest {
     }
 
     @Test
-    public void itemRequestImpl_FindAll_Ok() {
+    public void findAllOk() {
         ItemRequestResponseDto itemRequestResponseDtoSaved =
                 itemRequestService.create(itemRequestDto, userDto.getId());
         Collection<ItemRequestResponseDto> itemRequestResponseDtos =
@@ -67,7 +65,7 @@ public class ItemRequestImplTest {
     }
 
     @Test
-    public void itemRequestImpl_FindAll_EmptyResult() {
+    public void findAllEmptyResult() {
         ItemRequestResponseDto itemRequestResponseDtoSaved =
                 itemRequestService.create(itemRequestDto, userDto.getId());
         Collection<ItemRequestResponseDto> itemRequestResponseDtos =
@@ -76,7 +74,7 @@ public class ItemRequestImplTest {
     }
 
     @Test
-    public void itemRequestImpl_FindById_Ok() {
+    public void findByIdOk() {
         ItemRequestResponseDto itemRequestResponseDtoSaved =
                 itemRequestService.create(itemRequestDto, userDto.getId());
         ItemRequestResponseDto itemRequestResponseDtoById =
@@ -85,7 +83,7 @@ public class ItemRequestImplTest {
     }
 
     @Test
-    public void itemRequestImpl_FindById_WrongIdThrowsError() {
+    public void findByIdWrongIdThrowsError() {
         assertThrows(NotFoundException.class, () -> itemRequestService.findById(-1, userDto.getId()));
     }
 }

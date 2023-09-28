@@ -23,7 +23,7 @@ public class BookingValidatorTest {
     }
 
     @Test
-    public void bookingValidator_StartDateBeforeNow_Error() {
+    public void startDateBeforeNowError() {
         BookingDtoRequest bookingDtoRequest = new BookingDtoRequest();
         bookingDtoRequest.setItemId(1L);
         bookingDtoRequest.setStart(LocalDateTime.now().minusDays(1));
@@ -33,7 +33,7 @@ public class BookingValidatorTest {
     }
 
     @Test
-    public void bookingValidator_EndDateBeforeStart_Error() {
+    public void endDateBeforeStartError() {
         BookingDtoRequest bookingDtoRequest = new BookingDtoRequest();
         bookingDtoRequest.setItemId(1L);
         bookingDtoRequest.setStart(LocalDateTime.now().plusDays(2));
@@ -43,7 +43,7 @@ public class BookingValidatorTest {
     }
 
     @Test
-    public void bookingValidator_StartAndEndDateAreSame_Error() {
+    public void startAndEndDateAreSameError() {
         BookingDtoRequest bookingDtoRequest = new BookingDtoRequest();
         bookingDtoRequest.setItemId(1L);
         LocalDateTime date = LocalDateTime.now();
@@ -54,7 +54,7 @@ public class BookingValidatorTest {
     }
 
     @Test
-    public void bookingValidator_StartNull_Error() {
+    public void startNullError() {
         BookingDtoRequest bookingDtoRequest = new BookingDtoRequest();
         bookingDtoRequest.setItemId(1L);
         bookingDtoRequest.setStart(null);
@@ -64,7 +64,7 @@ public class BookingValidatorTest {
     }
 
     @Test
-    public void bookingValidator_EndNull_Error() {
+    public void endNullError() {
         BookingDtoRequest bookingDtoRequest = new BookingDtoRequest();
         bookingDtoRequest.setItemId(1L);
         bookingDtoRequest.setStart(LocalDateTime.now().plusDays(2));

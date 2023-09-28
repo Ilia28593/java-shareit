@@ -42,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentMapper commentMapper;
 
     @Override
-    public ItemDtoWithBookingDto getById(long itemId, long userId) {
+    public ItemDtoInBookingDto getById(long itemId, long userId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(String.format("item %s not found", itemId)));
         BookingInItemDtoResponse lastBooking = null;
@@ -61,8 +61,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Collection<ItemDtoWithBookingDto> findByUserId(long userId, int from, int size) {
-        Collection<ItemDtoWithBookingDto> itemDtoWithBookingDtos = new ArrayList<>();
+    public Collection<ItemDtoInBookingDto> findByUserId(long userId, int from, int size) {
+        Collection<ItemDtoInBookingDto> itemDtoInBookingDtos = new ArrayList<>();
         Collection<Item> items;
         Pageable pageable = Utilities.getPageable(from, size, Sort.unsorted());
         items = itemRepository.findItemsByOwnerId(userId, pageable);
@@ -75,9 +75,9 @@ public class ItemServiceImpl implements ItemService {
                     .orElse(null);
             Collection<CommentResponseDto> commentsResponseDto = commentMapper
                     .toCommentsResponseDto(commentRepository.findCommentsByItem(item));
-            itemDtoWithBookingDtos.add(itemMapper.toItemDtoWithBookingDto(item, lastBooking, nextBooking, commentsResponseDto));
+            itemDtoInBookingDtos.add(itemMapper.toItemDtoWithBookingDto(item, lastBooking, nextBooking, commentsResponseDto));
         }
-        return itemDtoWithBookingDtos;
+        return itemDtoInBookingDtos;
     }
 
     @Transactional

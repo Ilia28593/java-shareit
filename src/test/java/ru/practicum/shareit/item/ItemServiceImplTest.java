@@ -15,7 +15,7 @@ import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.PermissionViolationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoWithBookingDto;
+import ru.practicum.shareit.item.dto.ItemDtoInBookingDto;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -47,21 +47,21 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    public void itemServiceImpl_Save_ResponseIsValid() {
+    public void saveResponseIsValid() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         itemDto.setId(savedItemDto.getId());
         assertThat(itemDto).isEqualTo(savedItemDto);
     }
 
     @Test
-    public void itemServiceImpl_SaveAndGetById_AreSame() {
+    public void saveAndGetByIdAreSame() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
-        ItemDtoWithBookingDto getByIdItemDtoWithBookingDto = itemService.getById(savedItemDto.getId(), userDto.getId());
-        assertThat(getByIdItemDtoWithBookingDto).isEqualTo(Fixtures.getItemResponse1(getByIdItemDtoWithBookingDto.getId()));
+        ItemDtoInBookingDto getByIdItemDtoInBookingDto = itemService.getById(savedItemDto.getId(), userDto.getId());
+        assertThat(getByIdItemDtoInBookingDto).isEqualTo(Fixtures.getItemResponse1(getByIdItemDtoInBookingDto.getId()));
     }
 
     @Test
-    public void itemServiceImpl_Update_IsUpdated() {
+    public void updateIsUpdated() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         savedItemDto.setName(savedItemDto.getName() + "test");
         savedItemDto.setDescription(savedItemDto.getDescription() + "test");
@@ -70,21 +70,21 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    public void itemServiceImpl_Update_ThrowsErrorPermissionViolation() {
+    public void updateThrowsErrorPermissionViolation() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         assertThrows(PermissionViolationException.class,
                 () -> itemService.update(savedItemDto, userDto2.getId()));
     }
 
     @Test
-    public void itemServiceImpl_Delete_GetByIdRaiseError() {
+    public void deleteGetByIdRaiseError() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         itemService.delete(savedItemDto.getId());
         assertThrows(NotFoundException.class, () -> itemService.getById(savedItemDto.getId(), userDto.getId()));
     }
 
     @Test
-    public void itemServiceImpl_FindByUserId_CorrectResult() {
+    public void findByUserIdCorrectResult() {
         ItemDto savedItemDto1 = itemService.create(itemDto, userDto.getId());
         ItemDto savedItemDto2 = itemService.create(itemDto2, userDto2.getId());
         assertThat(itemService.findByUserId(userDto.getId(), 0, Integer.MAX_VALUE))
@@ -92,7 +92,7 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    public void itemServiceImpl_Search_CorrectResult() {
+    public void searchCorrectResult() {
         ItemDto savedItemDto1 = itemService.create(itemDto, userDto.getId());
         ItemDto savedItemDto2 = itemService.create(itemDto2, userDto2.getId());
         assertThat(itemService.search(savedItemDto1.getName(), userDto.getId(), 0, Integer.MAX_VALUE))
@@ -100,14 +100,14 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    public void itemServiceImpl_AddCommentWithNoBooking_ThrowBadRequest() {
+    public void addCommentWithNoBookingThrowBadRequest() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         assertThrows(BadRequestException.class,
                 () -> itemService.addComment(commentDto, savedItemDto.getId(), userDto.getId()));
     }
 
     @Test
-    public void itemServiceImpl_AddCommentWithNoBooking_Ok() {
+    public void addCommentWithNoBookingOk() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         BookingDtoRequest bookingDtoRequest = Fixtures.getBooking(savedItemDto.getId());
         bookingDtoRequest.setStart(LocalDateTime.now().minusDays(5));

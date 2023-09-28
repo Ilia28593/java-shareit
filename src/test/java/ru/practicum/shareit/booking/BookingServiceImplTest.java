@@ -44,7 +44,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_Save_ResponseIsValid() {
+    public void saveResponseIsValid() {
         BookingDtoResponse bookingDtoResponse = bookingService.create(bookingDto, userDto.getId());
         assertThat(bookingDtoResponse).hasFieldOrPropertyWithValue("item", itemDto)
                 .hasFieldOrPropertyWithValue("booker", userDto)
@@ -54,7 +54,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetById_Ok() {
+    public void getByIdOk() {
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         BookingDtoResponse bookingDtoResponseGetById =
                 bookingService.getById(bookingDtoSaved.getId(), userDto.getId());
@@ -62,21 +62,21 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_Approve_True() {
+    public void approveTrue() {
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         BookingDtoResponse bookingDtoAfterApproval = bookingService.approve(bookingDtoSaved.getId(), true, userDto2.getId());
         assertThat(bookingDtoAfterApproval).hasFieldOrPropertyWithValue("status", APPROVED);
     }
 
     @Test
-    public void bookingServiceImpl_Approve_False() {
+    public void approveFalse() {
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         BookingDtoResponse bookingDtoAfterApproval = bookingService.approve(bookingDtoSaved.getId(), false, userDto2.getId());
         assertThat(bookingDtoAfterApproval).hasFieldOrPropertyWithValue("status", BookingStatus.REJECTED);
     }
 
     @Test
-    public void bookingServiceImpl_GetAllByBooker() {
+    public void getAllByBooker() {
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByBookerId(ALL, userDto.getId(), 0, Integer.MAX_VALUE);
@@ -84,7 +84,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetCurrentByBooker() {
+    public void getCurrentByBooker() {
         bookingDto.setStart(LocalDateTime.now().minusDays(5));
         bookingDto.setEnd(LocalDateTime.now().plusDays(5));
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
@@ -94,7 +94,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetFutureByBooker() {
+    public void getFutureByBooker() {
         bookingDto.setStart(LocalDateTime.now().plusDays(5));
         bookingDto.setEnd(LocalDateTime.now().plusDays(6));
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
@@ -104,7 +104,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetPastByBooker() {
+    public void getPastByBooker() {
         bookingDto.setStart(LocalDateTime.now().minusDays(5));
         bookingDto.setEnd(LocalDateTime.now().minusDays(4));
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
@@ -114,7 +114,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetRejectedByBooker() {
+    public void getRejectedByBooker() {
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         bookingDtoSaved = bookingService.approve(bookingDtoSaved.getId(), false, userDto2.getId());
         Collection<BookingDtoResponse> bookingDtosResponse =
@@ -123,7 +123,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetWaitingByBooker() {
+    public void getWaitingByBooker() {
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByBookerId(BookingStatusFilter.WAITING, userDto.getId(), 0, Integer.MAX_VALUE);
@@ -131,7 +131,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetAllByItemOwner() {
+    public void getAllByItemOwner() {
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByItemOwnerId(ALL, userDto2.getId(), 0, Integer.MAX_VALUE);
@@ -139,7 +139,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetCurrentByItemOwner() {
+    public void getCurrentByItemOwner() {
         bookingDto.setStart(LocalDateTime.now().minusDays(5));
         bookingDto.setEnd(LocalDateTime.now().plusDays(5));
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
@@ -149,7 +149,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetFutureByItemOwner() {
+    public void getFutureByItemOwner() {
         bookingDto.setStart(LocalDateTime.now().plusDays(5));
         bookingDto.setEnd(LocalDateTime.now().plusDays(6));
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
@@ -159,7 +159,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetPastByItemOwner() {
+    public void getPastByItemOwner() {
         bookingDto.setStart(LocalDateTime.now().minusDays(5));
         bookingDto.setEnd(LocalDateTime.now().minusDays(4));
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
@@ -169,7 +169,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetRejectedByItemOwner() {
+    public void getRejectedByItemOwner() {
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         bookingDtoSaved = bookingService.approve(bookingDtoSaved.getId(), false, userDto2.getId());
         Collection<BookingDtoResponse> bookingDtosResponse =
@@ -178,7 +178,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetWaitingByItemOwner() {
+    public void getWaitingByItemOwner() {
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByItemOwnerId(BookingStatusFilter.WAITING, userDto2.getId(), 0, Integer.MAX_VALUE);

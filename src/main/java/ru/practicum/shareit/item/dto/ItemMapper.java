@@ -14,10 +14,10 @@ public interface ItemMapper {
 
     Collection<ItemDto> toItemDtos(Collection<Item> items);
 
-    ItemDtoWithBookingDto toItemDtoWithBookingDto(Item item,
-                                                  BookingInItemDtoResponse lastBooking,
-                                                  BookingInItemDtoResponse nextBooking,
-                                                  Collection<CommentResponseDto> comments);
+    ItemDtoInBookingDto toItemDtoWithBookingDto(Item item,
+                                                BookingInItemDtoResponse lastBooking,
+                                                BookingInItemDtoResponse nextBooking,
+                                                Collection<CommentResponseDto> comments);
 
     Item toItem(ItemDto itemDto, User user, ItemRequest itemRequest);
 }

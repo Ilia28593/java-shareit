@@ -39,15 +39,13 @@ public class BookingControllerTest {
     private final BookingDtoResponse bookingDtoResponse = Fixtures.getBookingResponse(1, 1L);
 
     @Test
-    public void bookingService_Create() throws Exception {
+    public void create() throws Exception {
         when(bookingService.create(any(), anyLong()))
                 .thenReturn(bookingDtoResponse);
 
         mvc.perform(post("/bookings")
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
                         .header(Constants.HEADER_USER_ID, 1)
                 )
                 .andExpect(status().isOk())
@@ -60,15 +58,13 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void bookingService_Approve() throws Exception {
+    public void approve() throws Exception {
         when(bookingService.approve(anyLong(), anyBoolean(), anyLong()))
                 .thenReturn(bookingDtoResponse);
 
         mvc.perform(patch("/bookings/{bookingId}?approved=true", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
                         .header(Constants.HEADER_USER_ID, 1)
                 )
                 .andExpect(status().isOk())
@@ -81,15 +77,13 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void bookingService_GetById() throws Exception {
+    public void getById() throws Exception {
         when(bookingService.getById(anyLong(), anyLong()))
                 .thenReturn(bookingDtoResponse);
 
         mvc.perform(get("/bookings/{bookingId}", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
                         .header(Constants.HEADER_USER_ID, 1)
                 )
                 .andExpect(status().isOk())
@@ -102,93 +96,73 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void bookingService_GetById_IsNotFound() throws Exception {
+    public void getByIdIsNotFound() throws Exception {
         when(bookingService.getById(anyLong(), anyLong()))
                 .thenThrow(NotFoundException.class);
 
         mvc.perform(get("/bookings/{bookingId}", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(Constants.HEADER_USER_ID, 1))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void bookingService_GetById_IsBadRequest() throws Exception {
+    public void getByIdIsBadRequest() throws Exception {
         when(bookingService.getById(anyLong(), anyLong()))
                 .thenThrow(BadRequestException.class);
-
         mvc.perform(get("/bookings/{bookingId}", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
                         .header(Constants.HEADER_USER_ID, 1)
                 )
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void bookingService_GetById_StringInsteadOfInt_IsBadRequest() throws Exception {
+    public void getByIdInsteadOfIntIsBadRequest() throws Exception {
         when(bookingService.getById(anyLong(), anyLong()))
                 .thenThrow(BadRequestException.class);
 
         mvc.perform(get("/bookings/{bookingId}", "NOT_ID")
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(Constants.HEADER_USER_ID, 1))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void bookingService_GetAllByBookerId() throws Exception {
+    public void getAllByBookerId() throws Exception {
         when(bookingService.getAllByBookerId(any(), anyLong(), anyInt(), anyInt()))
                 .thenReturn(List.of(bookingDtoResponse, bookingDtoResponse));
-
         mvc.perform(get("/bookings?state=All", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(Constants.HEADER_USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(2)));
     }
 
     @Test
-    public void bookingService_GetAllByBookerId_BadRequest() throws Exception {
+    public void getAllByBookerIdBadRequest() throws Exception {
         when(bookingService.getAllByBookerId(any(), anyLong(), anyInt(), anyInt()))
                 .thenReturn(List.of(bookingDtoResponse, bookingDtoResponse));
-
         mvc.perform(get("/bookings?state=UNKNOWN-STATE", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(Constants.HEADER_USER_ID, 1))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void bookingService_GetAllByItemOwnerId() throws Exception {
+    public void getAllByItemOwnerId() throws Exception {
         when(bookingService.getAllByItemOwnerId(any(), anyLong(), anyInt(), anyInt()))
                 .thenReturn(List.of(bookingDtoResponse, bookingDtoResponse));
 
         mvc.perform(get("/bookings/owner?state=All", 1L)
                         .content(mapper.writeValueAsString(bookingDtoRequest))
-                        .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header(Constants.HEADER_USER_ID, 1)
-                )
+                        .header(Constants.HEADER_USER_ID, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(2)));
     }

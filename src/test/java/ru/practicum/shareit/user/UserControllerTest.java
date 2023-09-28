@@ -34,14 +34,11 @@ public class UserControllerTest {
     private UserService userService;
 
     @Test
-    void userController_GetById() throws Exception {
+    void getById() throws Exception {
         when(userService.getById(anyLong())).thenReturn(userDto);
-
         mvc.perform(get("/users/{userId}", userDto.getId().toString())
                         .content(mapper.writeValueAsString(userDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(userDto.getName())))
@@ -50,27 +47,21 @@ public class UserControllerTest {
     }
 
     @Test
-    void userController_GetAll() throws Exception {
+    void getAll() throws Exception {
         when(userService.getAll()).thenReturn(userDtos);
-
         mvc.perform(get("/users", userDto.getId().toString())
                         .content(mapper.writeValueAsString(userDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(2)));
     }
 
     @Test
-    void userController_CreateUser() throws Exception {
+    void createUser() throws Exception {
         when(userService.create(any())).thenReturn(userDto);
-
         mvc.perform(post("/users")
                         .content(mapper.writeValueAsString(userDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(userDto.getName())))
@@ -78,14 +69,11 @@ public class UserControllerTest {
     }
 
     @Test
-    void userController_UpdateUser() throws Exception {
+    void updateUser() throws Exception {
         when(userService.update(any())).thenReturn(userDto);
-
         mvc.perform(patch("/users/{userId}", userDto.getId().toString())
                         .content(mapper.writeValueAsString(userDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(userDto.getName())))
@@ -93,12 +81,10 @@ public class UserControllerTest {
     }
 
     @Test
-    void userController_Delete() throws Exception {
+    void deletes() throws Exception {
         mvc.perform(delete("/users/{userId}", userDto.getId().toString())
                         .content(mapper.writeValueAsString(userDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }

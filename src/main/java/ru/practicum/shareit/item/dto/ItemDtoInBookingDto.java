@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import ru.practicum.shareit.booking.dto.BookingInItemDtoResponse;
 import ru.practicum.shareit.utils.Create;
 
@@ -14,7 +15,8 @@ import java.util.Collection;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class ItemDtoWithBookingDto {
+@Accessors(chain = true)
+public class ItemDtoInBookingDto {
     private Long id;
     @NotEmpty(message = "name can not be empty", groups = {Create.class})
     private String name;
