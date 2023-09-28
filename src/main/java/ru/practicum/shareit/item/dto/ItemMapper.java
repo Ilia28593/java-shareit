@@ -12,12 +12,12 @@ import java.util.Collection;
 public interface ItemMapper {
     ItemDto toItemDto(Item item);
 
-    Collection<ItemDto> toItemDtos(Collection<Item> items);
+    Collection<ItemDto> toItemCollection(Collection<Item> items);
 
-    ItemDtoWithBookingDto toItemDtoWithBookingDto(Item item,
-                                                  BookingInItemDtoResponse lastBooking,
-                                                  BookingInItemDtoResponse nextBooking,
-                                                  Collection<CommentResponseDto> comments);
+    ItemDtoByBookingDto toItemDtoWithBookingDto(Item item,
+                                                BookingInItemDtoResponse lastBooking,
+                                                BookingInItemDtoResponse nextBooking,
+                                                Collection<CommentResponseDto> comments);
 
     Item toItem(ItemDto itemDto, User user, ItemRequest itemRequest);
 }

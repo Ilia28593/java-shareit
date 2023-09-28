@@ -17,11 +17,11 @@ public class ItemMapperImpl implements ItemMapper {
 
     @Override
     public ItemDto toItemDto(Item item) {
-        ItemDto itemDto = new ItemDto();
-        itemDto.setId(item.getId());
-        itemDto.setName(item.getName());
-        itemDto.setDescription(item.getDescription());
-        itemDto.setAvailable(item.getAvailable());
+        ItemDto itemDto = new ItemDto()
+                .setId(item.getId())
+                .setName(item.getName())
+                .setDescription(item.getDescription())
+                .setAvailable(item.getAvailable());
         if (item.getItemRequest() != null) {
             itemDto.setRequestId(item.getItemRequest().getId());
         }
@@ -29,26 +29,26 @@ public class ItemMapperImpl implements ItemMapper {
     }
 
     @Override
-    public Collection<ItemDto> toItemDtos(Collection<Item> items) {
+    public Collection<ItemDto> toItemCollection(Collection<Item> items) {
         return items.stream().map(this::toItemDto).collect(Collectors.toList());
     }
 
     @Override
-    public ItemDtoWithBookingDto toItemDtoWithBookingDto(Item item, BookingInItemDtoResponse lastBooking,
-                                                         BookingInItemDtoResponse nextBooking,
-                                                         Collection<CommentResponseDto> comments) {
-        ItemDtoWithBookingDto itemDtoWithBookingDto = new ItemDtoWithBookingDto();
-        itemDtoWithBookingDto.setId(item.getId());
-        itemDtoWithBookingDto.setName(item.getName());
-        itemDtoWithBookingDto.setDescription(item.getDescription());
-        itemDtoWithBookingDto.setAvailable(item.getAvailable());
-        itemDtoWithBookingDto.setLastBooking(lastBooking);
-        itemDtoWithBookingDto.setNextBooking(nextBooking);
-        itemDtoWithBookingDto.setComments(comments);
+    public ItemDtoByBookingDto toItemDtoWithBookingDto(Item item, BookingInItemDtoResponse lastBooking,
+                                                       BookingInItemDtoResponse nextBooking,
+                                                       Collection<CommentResponseDto> comments) {
+        ItemDtoByBookingDto itemDtoByBookingDto = new ItemDtoByBookingDto()
+                .setId(item.getId())
+                .setName(item.getName())
+                .setDescription(item.getDescription())
+                .setAvailable(item.getAvailable())
+                .setLastBooking(lastBooking)
+                .setNextBooking(nextBooking)
+                .setComments(comments);
         if (item.getItemRequest() != null) {
-            itemDtoWithBookingDto.setRequestId(item.getItemRequest().getId());
+            itemDtoByBookingDto.setRequestId(item.getItemRequest().getId());
         }
-        return itemDtoWithBookingDto;
+        return itemDtoByBookingDto;
     }
 
     @Override

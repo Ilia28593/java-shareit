@@ -15,7 +15,8 @@ import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.PermissionViolationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoWithBookingDto;
+import ru.practicum.shareit.item.dto.ItemDtoByBookingDto;
+import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -56,8 +57,8 @@ public class ItemServiceImplTest {
     @Test
     public void itemServiceImpl_SaveAndGetById_AreSame() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
-        ItemDtoWithBookingDto getByIdItemDtoWithBookingDto = itemService.getById(savedItemDto.getId(), userDto.getId());
-        assertThat(getByIdItemDtoWithBookingDto).isEqualTo(Fixtures.getItemResponse1(getByIdItemDtoWithBookingDto.getId()));
+        ItemDtoByBookingDto getByIdItemDtoByBookingDto = itemService.getById(savedItemDto.getId(), userDto.getId());
+        assertThat(getByIdItemDtoByBookingDto).isEqualTo(Fixtures.getItemResponse1(getByIdItemDtoByBookingDto.getId()));
     }
 
     @Test

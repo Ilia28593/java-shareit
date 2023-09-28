@@ -23,7 +23,7 @@ public class ItemRequestMapperImpl implements ItemRequestMapper {
                 .setDescription(itemRequest.getDescription())
                 .setCreated(itemRequest.getCreated());
         if (itemRequest.getItems() != null) {
-            itemRequestResponseDto.setItems(itemMapper.toItemDtos(itemRequest.getItems()));
+            itemRequestResponseDto.setItems(itemMapper.toItemCollection(itemRequest.getItems()));
         }
         return itemRequestResponseDto;
     }

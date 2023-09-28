@@ -12,7 +12,8 @@ import ru.practicum.shareit.Fixtures;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoWithBookingDto;
+import ru.practicum.shareit.item.dto.ItemDtoByBookingDto;
+import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.utils.Constants;
 
 import java.nio.charset.StandardCharsets;
@@ -34,8 +35,8 @@ public class ItemControllerTest {
     private final ObjectMapper mapper;
     private final ItemDto itemDto = Fixtures.getItem1();
     private final ItemDto itemDto2 = Fixtures.getItem2();
-    private final ItemDtoWithBookingDto itemResponseDto = Fixtures.getItemResponse1(1L);
-    private final ItemDtoWithBookingDto itemResponseDto2 = Fixtures.getItemResponse2(2L);
+    private final ItemDtoByBookingDto itemResponseDto = Fixtures.getItemResponse1(1L);
+    private final ItemDtoByBookingDto itemResponseDto2 = Fixtures.getItemResponse2(2L);
     @MockBean
     private final ItemService itemService;
 

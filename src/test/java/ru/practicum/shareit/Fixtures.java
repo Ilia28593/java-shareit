@@ -6,7 +6,7 @@ import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoWithBookingDto;
+import ru.practicum.shareit.item.dto.ItemDtoByBookingDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -41,15 +41,15 @@ public class Fixtures {
         return itemDto;
     }
 
-    public static ItemDtoWithBookingDto getItemResponse1(long id) {
+    public static ItemDtoByBookingDto getItemResponse1(long id) {
         ItemDto itemDto = Fixtures.getItem1();
-        ItemDtoWithBookingDto itemDtoWithBookingDto = new ItemDtoWithBookingDto();
-        itemDtoWithBookingDto.setId(id);
-        itemDtoWithBookingDto.setName(itemDto.getName());
-        itemDtoWithBookingDto.setDescription(itemDto.getDescription());
-        itemDtoWithBookingDto.setComments(Collections.emptyList());
-        itemDtoWithBookingDto.setAvailable(itemDto.getAvailable());
-        return itemDtoWithBookingDto;
+        ItemDtoByBookingDto itemDtoByBookingDto = new ItemDtoByBookingDto();
+        itemDtoByBookingDto.setId(id);
+        itemDtoByBookingDto.setName(itemDto.getName());
+        itemDtoByBookingDto.setDescription(itemDto.getDescription());
+        itemDtoByBookingDto.setComments(Collections.emptyList());
+        itemDtoByBookingDto.setAvailable(itemDto.getAvailable());
+        return itemDtoByBookingDto;
     }
 
     public static ItemDto getItem2() {
@@ -61,15 +61,15 @@ public class Fixtures {
         return itemDto;
     }
 
-    public static ItemDtoWithBookingDto getItemResponse2(long id) {
+    public static ItemDtoByBookingDto getItemResponse2(long id) {
         ItemDto itemDto = Fixtures.getItem2();
-        ItemDtoWithBookingDto itemDtoWithBookingDto = new ItemDtoWithBookingDto();
-        itemDtoWithBookingDto.setId(id);
-        itemDtoWithBookingDto.setName(itemDto.getName());
-        itemDtoWithBookingDto.setDescription(itemDto.getDescription());
-        itemDtoWithBookingDto.setComments(Collections.emptyList());
-        itemDtoWithBookingDto.setAvailable(itemDto.getAvailable());
-        return itemDtoWithBookingDto;
+        ItemDtoByBookingDto itemDtoByBookingDto = new ItemDtoByBookingDto();
+        itemDtoByBookingDto.setId(id);
+        itemDtoByBookingDto.setName(itemDto.getName());
+        itemDtoByBookingDto.setDescription(itemDto.getDescription());
+        itemDtoByBookingDto.setComments(Collections.emptyList());
+        itemDtoByBookingDto.setAvailable(itemDto.getAvailable());
+        return itemDtoByBookingDto;
     }
 
     public static CommentDto getComment() {
