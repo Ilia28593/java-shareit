@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.Fixtures;
+import ru.practicum.shareit.Samples;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
@@ -34,16 +34,16 @@ public class ItemServiceImplTest {
     private final ItemService itemService;
     private final UserService userService;
     private final BookingService bookingService;
-    private final ItemDto itemDto = Fixtures.getItem1();
-    private final ItemDto itemDto2 = Fixtures.getItem2();
-    private final CommentDto commentDto = Fixtures.getComment();
+    private final ItemDto itemDto = Samples.getItem1();
+    private final ItemDto itemDto2 = Samples.getItem2();
+    private final CommentDto commentDto = Samples.getComment_1();
     private UserDto userDto;
     private UserDto userDto2;
 
     @BeforeEach
     public void beforeEach() {
-        userDto = userService.create(Fixtures.getUser1());
-        userDto2 = userService.create(Fixtures.getUser2());
+        userDto = userService.create(Samples.getUser1());
+        userDto2 = userService.create(Samples.getUser2());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class ItemServiceImplTest {
     public void saveAndGetByIdAreSame() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
         ItemDtoInBookingDto getByIdItemDtoInBookingDto = itemService.getById(savedItemDto.getId(), userDto.getId());
-        assertThat(getByIdItemDtoInBookingDto).isEqualTo(Fixtures.getItemResponse1(getByIdItemDtoInBookingDto.getId()));
+        assertThat(getByIdItemDtoInBookingDto).isEqualTo(Samples.getItemResponse1(getByIdItemDtoInBookingDto.getId()));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class ItemServiceImplTest {
         ItemDto savedItemDto1 = itemService.create(itemDto, userDto.getId());
         ItemDto savedItemDto2 = itemService.create(itemDto2, userDto2.getId());
         assertThat(itemService.findByUserId(userDto.getId(), 0, Integer.MAX_VALUE))
-                .isEqualTo(List.of(Fixtures.getItemResponse1(savedItemDto1.getId())));
+                .isEqualTo(List.of(Samples.getItemResponse1(savedItemDto1.getId())));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class ItemServiceImplTest {
     @Test
     public void addCommentWithNoBookingOk() {
         ItemDto savedItemDto = itemService.create(itemDto, userDto.getId());
-        BookingDtoRequest bookingDtoRequest = Fixtures.getBooking(savedItemDto.getId());
+        BookingDtoRequest bookingDtoRequest = Samples.getBooking(savedItemDto.getId());
         bookingDtoRequest.setStart(LocalDateTime.now().minusDays(5));
         bookingDtoRequest.setEnd(LocalDateTime.now().minusDays(4));
         BookingDtoResponse bookingDtoResponse =

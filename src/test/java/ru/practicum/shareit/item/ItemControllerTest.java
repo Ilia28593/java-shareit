@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.Fixtures;
+import ru.practicum.shareit.Samples;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -31,10 +31,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ItemControllerTest {
     private final MockMvc mvc;
     private final ObjectMapper mapper;
-    private final ItemDto itemDto = Fixtures.getItem1();
-    private final ItemDto itemDto2 = Fixtures.getItem2();
-    private final ItemDtoInBookingDto itemResponseDto = Fixtures.getItemResponse1(1L);
-    private final ItemDtoInBookingDto itemResponseDto2 = Fixtures.getItemResponse2(2L);
+    private final ItemDto itemDto = Samples.getItem1();
+    private final ItemDto itemDto2 = Samples.getItem2();
+    private final ItemDtoInBookingDto itemResponseDto = Samples.getItemResponse1(1L);
+    private final ItemDtoInBookingDto itemResponseDto2 = Samples.getItemResponse2(2L);
     @MockBean
     private final ItemService itemService;
 
@@ -119,8 +119,8 @@ public class ItemControllerTest {
 
     @Test
     void itemController_AddComment() throws Exception {
-        CommentResponseDto commentResponseDto = Fixtures.getCommentResponse(1L, "user", LocalDateTime.now());
-        CommentDto commentDto = Fixtures.getComment();
+        CommentResponseDto commentResponseDto = Samples.getCommentResponse(1L, "user", LocalDateTime.now());
+        CommentDto commentDto = Samples.getComment_1();
         when(itemService.addComment(any(), anyLong(), anyLong()))
                 .thenReturn(commentResponseDto);
         mvc.perform(post("/items/{itemId}/comment", 1L)

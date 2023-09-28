@@ -8,10 +8,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.Fixtures;
+import ru.practicum.shareit.Samples;
 import ru.practicum.shareit.user.dto.UserDto;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,8 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
     private final MockMvc mvc;
     private final ObjectMapper mapper;
-    private final UserDto userDto = Fixtures.getUser1();
-    private final Collection<UserDto> userDtos = List.of(Fixtures.getUser1(), Fixtures.getUser2());
+    private final UserDto userDto = Samples.getUser1();
+    private final Collection<UserDto> userDtos = List.of(Samples.getUser1(), Samples.getUser2());
     @MockBean
     private UserService userService;
 

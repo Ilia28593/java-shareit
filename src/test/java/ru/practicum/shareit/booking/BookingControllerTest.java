@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.Fixtures;
+import ru.practicum.shareit.Samples;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.exceptions.BadRequestException;
@@ -17,7 +17,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.utils.Constants;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
@@ -35,8 +34,8 @@ public class BookingControllerTest {
     private final ObjectMapper mapper;
     @MockBean
     private final BookingService bookingService;
-    private final BookingDtoRequest bookingDtoRequest = Fixtures.getBooking(1);
-    private final BookingDtoResponse bookingDtoResponse = Fixtures.getBookingResponse(1, 1L);
+    private final BookingDtoRequest bookingDtoRequest = Samples.getBooking(1);
+    private final BookingDtoResponse bookingDtoResponse = Samples.getBookingResponse(1, 1L);
 
     @Test
     public void create() throws Exception {

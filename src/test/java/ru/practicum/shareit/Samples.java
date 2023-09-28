@@ -15,22 +15,22 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
-public class Fixtures {
-    public static UserDto getUser_1() {
+public class Samples {
+    public static UserDto getUser1() {
         return new UserDto()
                 .setId(1L)
                 .setName("user_1")
                 .setEmail("user1@email.ru");
     }
 
-    public static UserDto getUser_2() {
+    public static UserDto getUser2() {
         return new UserDto()
                 .setId(2L)
                 .setName("user_2")
                 .setEmail("user2@email.ru");
     }
 
-    public static ItemDto getItem_1() {
+    public static ItemDto getItem1() {
         return new ItemDto()
                 .setId(1L)
                 .setName("Name item 1")
@@ -38,7 +38,7 @@ public class Fixtures {
                 .setAvailable(true);
     }
 
-    public static ItemDto getItem_2() {
+    public static ItemDto getItem2() {
         return new ItemDto()
                 .setId(2L)
                 .setName("Name item 2")
@@ -46,8 +46,8 @@ public class Fixtures {
                 .setAvailable(true);
     }
 
-    public static ItemDtoInBookingDto getResponseItem_1(long id) {
-        ItemDto itemDto = Samples.getItem_1();
+    public static ItemDtoInBookingDto getItemResponse1(long id) {
+        ItemDto itemDto = getItem1();
         return new ItemDtoInBookingDto()
                 .setId(id)
                 .setName(itemDto.getName())
@@ -56,8 +56,8 @@ public class Fixtures {
                 .setAvailable(itemDto.getAvailable());
     }
 
-    public static ItemDtoInBookingDto getResponseItem_2(long id) {
-        ItemDto itemDto = Samples.getItem_2();
+    public static ItemDtoInBookingDto getItemResponse2(long id) {
+        ItemDto itemDto = getItem2();
         return new ItemDtoInBookingDto()
                 .setId(id)
                 .setName(itemDto.getName())
@@ -89,9 +89,9 @@ public class Fixtures {
     public static BookingDtoResponse getBookingResponse(long id, long itemId) {
         return new BookingDtoResponse()
                 .setId(id)
-                .setItem(getItem_1())
+                .setItem(getItem1())
                 .setStatus(BookingStatus.WAITING)
-                .setBooker(getUser_1())
+                .setBooker(getUser1())
                 .setStart(getBooking(itemId).getStart())
                 .setStart(getBooking(itemId).getEnd());
     }

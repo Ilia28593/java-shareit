@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.Fixtures;
+import ru.practicum.shareit.Samples;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.ItemRequestController;
 import ru.practicum.shareit.request.ItemRequestService;
@@ -16,7 +16,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
 import ru.practicum.shareit.utils.Constants;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,11 +34,11 @@ public class ItemRequestControllerTest {
     private final ObjectMapper mapper;
     @MockBean
     private final ItemRequestService itemRequestService;
-    private final ItemDto itemDto = Fixtures.getItem1();
+    private final ItemDto itemDto = Samples.getItem1();
     private final ItemRequestResponseDto itemRequestResponseDto =
-            Fixtures.getItemRequestResponseDto(1L, List.of(itemDto), LocalDateTime.now());
+            Samples.getItemRequestResponseDto(1L, List.of(itemDto), LocalDateTime.now());
 
-    private final ItemRequestDto itemRequestDto = Fixtures.getItemRequestDto();
+    private final ItemRequestDto itemRequestDto = Samples.getItemRequestDto();
 
     @Test
     public void create() throws Exception {

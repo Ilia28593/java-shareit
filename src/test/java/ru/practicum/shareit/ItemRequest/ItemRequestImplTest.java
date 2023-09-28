@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.Fixtures;
+import ru.practicum.shareit.Samples;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.request.ItemRequestService;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
@@ -28,14 +28,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ItemRequestImplTest {
     private final ItemRequestService itemRequestService;
     private final UserService userService;
-    private final ItemRequestDto itemRequestDto = Fixtures.getItemRequestDto();
+    private final ItemRequestDto itemRequestDto = Samples.getItemRequestDto();
     private UserDto userDto;
     private UserDto userDto2;
 
     @BeforeEach
     private void beforeEach() {
-        userDto = userService.create(Fixtures.getUser1());
-        userDto2 = userService.create(Fixtures.getUser2());
+        userDto = userService.create(Samples.getUser1());
+        userDto2 = userService.create(Samples.getUser2());
     }
 
     @Test

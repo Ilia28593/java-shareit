@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.Fixtures;
+import ru.practicum.shareit.Samples;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.item.ItemService;
@@ -37,10 +37,10 @@ public class BookingServiceImplTest {
 
     @BeforeEach
     public void beforeEach() {
-        userDto = userService.create(Fixtures.getUser1());
-        userDto2 = userService.create(Fixtures.getUser2());
-        itemDto = itemService.create(Fixtures.getItem1(), userDto2.getId());
-        bookingDto = Fixtures.getBooking(itemDto.getId());
+        userDto = userService.create(Samples.getUser1());
+        userDto2 = userService.create(Samples.getUser2());
+        itemDto = itemService.create(Samples.getItem1(), userDto2.getId());
+        bookingDto = Samples.getBooking(itemDto.getId());
     }
 
     @Test
