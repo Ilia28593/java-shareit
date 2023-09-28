@@ -3,7 +3,7 @@ package ru.practicum.shareit.item.dto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.booking.dto.BookingInItemDtoResponse;
+import ru.practicum.shareit.booking.dto.BookingByItemDtoResponse;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
@@ -34,8 +34,8 @@ public class ItemMapperImpl implements ItemMapper {
     }
 
     @Override
-    public ItemDtoByBookingDto toItemDtoWithBookingDto(Item item, BookingInItemDtoResponse lastBooking,
-                                                       BookingInItemDtoResponse nextBooking,
+    public ItemDtoByBookingDto toItemDtoWithBookingDto(Item item, BookingByItemDtoResponse lastBooking,
+                                                       BookingByItemDtoResponse nextBooking,
                                                        Collection<CommentResponseDto> comments) {
         ItemDtoByBookingDto itemDtoByBookingDto = new ItemDtoByBookingDto()
                 .setId(item.getId())

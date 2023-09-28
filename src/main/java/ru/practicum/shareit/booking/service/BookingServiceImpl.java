@@ -1,21 +1,24 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.BookingStateFetchByBooker.BookingStateFetchBookerStrategyFactory;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.booking.dto.BookingMapper;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.booking.model.BookingStatusFilter;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.PermissionViolationException;
-import ru.practicum.shareit.item.pepository.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.service.UserServiceImpl;
 import ru.practicum.shareit.utils.Utilities;
 
 import java.time.LocalDateTime;
@@ -24,40 +27,39 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static ru.practicum.shareit.utils.Constants.*;
+
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
     private final BookingRepository bookingRepository;
-    private final UserRepository userRepository;
-    private final ItemRepository itemRepository;
+    private final UserServiceImpl userService;
+    private final ItemServiceImpl itemService;
     private final BookingStateFetchBookerStrategyFactory bookingStateFetchBookerStrategyFactory;
 
     @Override
-    public BookingDtoResponse create(BookingDtoRequest bookingDtoRequest, long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("user %s not found", userId)));
-        Item item = itemRepository.findById(bookingDtoRequest.getItemId())
-                .orElseThrow(() -> new NotFoundException(String.format("item %s not found", bookingDtoRequest.getItemId())));
-        if (!item.getAvailable()) {
-            throw new BadRequestException(String.format("item %s not available", item.getId()));
+    public BookingDtoResponse create(BookingDtoRequest bookingRequestDto, long userId) {
+        User user = userService.findById(userId);
+        Item item = itemService.findById(bookingRequestDto.getItemId());
+        if (Boolean.FALSE.equals(item.getAvailable())) {
+            throw new BadRequestException(ITEM_NOT_AVAILABLE_BY_ID + item.getId());
         }
         if (item.getOwner().getId() == userId) {
             throw new NotFoundException(String.format("user can not book its own item", item.getId()));
         }
-        Booking booking = bookingMapper.toBooking(bookingDtoRequest, item, user);
+        Booking booking = bookingMapper.toBooking(bookingRequestDto, item, user);
         return bookingMapper.toBookingDtoResponse(bookingRepository.save(booking));
     }
 
     @Override
     public BookingDtoResponse approve(long bookingId, boolean approved, long userId) {
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException(String.format("booking %s not found", bookingId)));
+        Booking booking = findById(bookingId);
         if (booking.getItem().getOwner().getId() != userId) {
             throw new PermissionViolationException("Only item owner can approve booking");
         }
         if (booking.getStatus().equals(BookingStatus.APPROVED)) {
-            throw new BadRequestException(String.format("booking %s is already approved", bookingId));
+            throw new BadRequestException(BOOKING_NOT_AVAILABLE_BY_ID + bookingId);
         }
         booking.setStatus(approved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
         return bookingMapper.toBookingDtoResponse(bookingRepository.save(booking));
@@ -65,32 +67,25 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDtoResponse getById(long bookingId, long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("user %s not found", userId)));
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException(String.format("booking %s not found", bookingId)));
+        User user = userService.findById(userId);
+        Booking booking = findById(bookingId);
         if (!Objects.equals(booking.getBooker(), user) && !Objects.equals(booking.getItem().getOwner(), user)) {
             throw new NotFoundException("Booking was not booked by user and item owner is different");
         }
-        return bookingRepository.findById(bookingId)
-                .map(bookingMapper::toBookingDtoResponse)
-                .orElseThrow(() -> new NotFoundException(String.format("booking %s not found", bookingId)));
+        return bookingMapper.toBookingDtoResponse(findById(bookingId));
     }
 
     @Override
     public Collection<BookingDtoResponse> getAllByBookerId(BookingStatusFilter state, long userId, int from, int size) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("user %s not found", userId)));
+        User user = userService.findById(userId);
         Pageable pageable = Utilities.getPageable(from, size, Sort.by("start").descending());
         Collection<Booking> bookings = bookingStateFetchBookerStrategyFactory.findStrategy(state).fetch(user, pageable);
-        return bookings.stream().map(bookingMapper::toBookingDtoResponse)
-                .collect(Collectors.toList());
+        return bookings.stream().map(bookingMapper::toBookingDtoResponse).collect(Collectors.toList());
     }
 
     @Override
     public Collection<BookingDtoResponse> getAllByItemOwnerId(BookingStatusFilter state, long userId, int from, int size) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("user %s not found", userId)));
+        User user = userService.findById(userId);
         Collection<Booking> bookings;
         Pageable pageable = Utilities.getPageable(from, size, Sort.by("start").descending());
         switch (state) {
@@ -118,5 +113,10 @@ public class BookingServiceImpl implements BookingService {
         }
         return bookings.stream().map(bookingMapper::toBookingDtoResponse)
                 .collect(Collectors.toList());
+    }
+
+    public Booking findById(long bookingId) {
+        return bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException(BOOKING_NO_FOUND_BY_ID + bookingId));
     }
 }

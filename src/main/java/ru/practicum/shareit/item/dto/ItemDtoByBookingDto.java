@@ -2,7 +2,7 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-import ru.practicum.shareit.booking.dto.BookingInItemDtoResponse;
+import ru.practicum.shareit.booking.dto.BookingByItemDtoResponse;
 import ru.practicum.shareit.utils.Create;
 
 import javax.validation.constraints.NotEmpty;
@@ -26,8 +26,8 @@ public class ItemDtoByBookingDto {
     private String description;
     @NotNull(message = "available can not be empty", groups = {Create.class})
     private Boolean available;
-    private BookingInItemDtoResponse lastBooking;
-    private BookingInItemDtoResponse nextBooking;
+    private BookingByItemDtoResponse lastBooking;
+    private BookingByItemDtoResponse nextBooking;
     private Collection<CommentResponseDto> comments;
     private Long requestId;
 }

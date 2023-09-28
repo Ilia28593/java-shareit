@@ -6,10 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.booking.BookingRepository;
-import ru.practicum.shareit.booking.BookingStatus;
-import ru.practicum.shareit.booking.dto.BookingInItemDtoResponse;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.booking.dto.BookingByItemDtoResponse;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
@@ -50,8 +50,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDtoByBookingDto getById(long itemId, long userId) {
         Item item = findById(itemId);
-        BookingInItemDtoResponse lastBooking = null;
-        BookingInItemDtoResponse nextBooking = null;
+        BookingByItemDtoResponse lastBooking = null;
+        BookingByItemDtoResponse nextBooking = null;
         if (item.getOwner().getId() == userId) {
             lastBooking = bookingRepository.findLastBooking(itemId)
                     .map(bookingMapper::toBookingInItemDtoResponse)
@@ -72,10 +72,10 @@ public class ItemServiceImpl implements ItemService {
         Pageable pageable = Utilities.getPageable(from, size, Sort.unsorted());
         items = itemRepository.findItemsByOwnerId(userId, pageable);
         for (Item item : items) {
-            BookingInItemDtoResponse lastBooking = bookingRepository.findLastBooking(item.getId())
+            BookingByItemDtoResponse lastBooking = bookingRepository.findLastBooking(item.getId())
                     .map(bookingMapper::toBookingInItemDtoResponse)
                     .orElse(null);
-            BookingInItemDtoResponse nextBooking = bookingRepository.findNextBooking(item.getId())
+            BookingByItemDtoResponse nextBooking = bookingRepository.findNextBooking(item.getId())
                     .map(bookingMapper::toBookingInItemDtoResponse)
                     .orElse(null);
             Collection<CommentResponseDto> commentsResponseDto = commentMapper
