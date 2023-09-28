@@ -34,13 +34,11 @@ public class ItemRequestImplTest {
     private final ItemRequestDto itemRequestDto = Fixtures.getItemRequestDto();
     private UserDto userDto;
     private UserDto userDto2;
-    private ItemDto itemDto;
 
     @BeforeEach
     private void beforeEach() {
         userDto = userService.create(Fixtures.getUser1());
         userDto2 = userService.create(Fixtures.getUser2());
-        itemDto = itemService.create(Fixtures.getItem1(), userDto2.getId());
     }
 
     @Test
