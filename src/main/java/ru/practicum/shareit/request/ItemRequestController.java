@@ -4,13 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.config.Constants;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
-import ru.practicum.shareit.config.Constants;
 
 import javax.validation.constraints.Min;
 import java.util.Collection;
-import java.util.Collections;
 
 @RestController
 @RequestMapping(path = "/requests")
