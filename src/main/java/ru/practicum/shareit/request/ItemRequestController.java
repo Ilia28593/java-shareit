@@ -6,7 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
-import ru.practicum.shareit.utils.Constants;
+import ru.practicum.shareit.config.Constants;
 
 import javax.validation.constraints.Min;
 import java.util.Collection;

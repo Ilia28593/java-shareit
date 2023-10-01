@@ -14,7 +14,7 @@ import ru.practicum.shareit.request.ItemRequestController;
 import ru.practicum.shareit.request.ItemRequestService;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
-import ru.practicum.shareit.utils.Constants;
+import ru.practicum.shareit.config.Constants;
 
 import java.time.LocalDateTime;
 import java.util.List;

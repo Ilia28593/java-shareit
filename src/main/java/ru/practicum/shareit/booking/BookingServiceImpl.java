@@ -15,8 +15,8 @@ import ru.practicum.shareit.exceptions.PermissionViolationException;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserRepository;
-import ru.practicum.shareit.utils.Utilities;
+import ru.practicum.shareit.config.Utilities;
+import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -29,14 +29,13 @@ import java.util.stream.Collectors;
 public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
     private final BookingRepository bookingRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final ItemRepository itemRepository;
     private final BookingStateFetchBookerStrategyFactory bookingStateFetchBookerStrategyFactory;
 
     @Override
     public BookingDtoResponse create(BookingDtoRequest bookingDtoRequest, long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("user %s not found", userId)));
+        User user = userService.getUserById(userId);
         Item item = itemRepository.findById(bookingDtoRequest.getItemId())
                 .orElseThrow(() -> new NotFoundException(String.format("item %s not found", bookingDtoRequest.getItemId())));
         if (!item.getAvailable()) {
@@ -65,8 +64,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDtoResponse getById(long bookingId, long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("user %s not found", userId)));
+        User user = userService.getUserById(userId);
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException(String.format("booking %s not found", bookingId)));
         if (!Objects.equals(booking.getBooker(), user) && !Objects.equals(booking.getItem().getOwner(), user)) {
@@ -79,8 +77,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Collection<BookingDtoResponse> getAllByBookerId(BookingStatusFilter state, long userId, int from, int size) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("user %s not found", userId)));
+        User user = userService.getUserById(userId);
         Pageable pageable = Utilities.getPageable(from, size, Sort.by("start").descending());
         Collection<Booking> bookings = bookingStateFetchBookerStrategyFactory.findStrategy(state).fetch(user, pageable);
         return bookings.stream().map(bookingMapper::toBookingDtoResponse)
@@ -89,8 +86,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Collection<BookingDtoResponse> getAllByItemOwnerId(BookingStatusFilter state, long userId, int from, int size) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("user %s not found", userId)));
+        User user = userService.getUserById(userId);
         Collection<Booking> bookings;
         Pageable pageable = Utilities.getPageable(from, size, Sort.by("start").descending());
         switch (state) {
