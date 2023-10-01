@@ -40,12 +40,20 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public Collection<ItemRequestResponseDto> findAll(int from, int size, long userId) {
         User user = userService.getUserById(userId);
-        PageRequest pageRequest = PageRequest.of(from / size, size);
-        return itemRequestMapper.toItemRequestDtos(
-                itemRequestRepository.findAllByRequesterIsNot(user, pageRequest)
-                        .stream()
-                        .sorted(Comparator.comparing(ItemRequest::getCreated).reversed())
-                        .collect(Collectors.toList()));
+        if (size == 0) {
+            return itemRequestMapper.toItemRequestDtos(
+                    itemRequestRepository.findAllByRequester(user)
+                            .stream()
+                            .sorted(Comparator.comparing(ItemRequest::getCreated).reversed())
+                            .collect(Collectors.toList()));
+        }
+            PageRequest pageRequest = PageRequest.of(from / size, size);
+            return itemRequestMapper.toItemRequestDtos(
+                    itemRequestRepository.findAllByRequesterIsNot(user, pageRequest)
+                            .stream()
+                            .sorted(Comparator.comparing(ItemRequest::getCreated).reversed())
+                            .collect(Collectors.toList()));
+
     }
 
     @Override

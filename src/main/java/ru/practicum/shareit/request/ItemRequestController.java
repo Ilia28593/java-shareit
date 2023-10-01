@@ -37,7 +37,7 @@ public class ItemRequestController {
         if (from != null && size != null) {
             return itemRequestService.findAll(from, size, userId);
         }
-        return Collections.emptyList();
+        return itemRequestService.findAll(0, 0, userId);
     }
 
     @GetMapping("/{requestId}")
