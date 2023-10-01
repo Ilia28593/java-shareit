@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Samples;
 import ru.practicum.shareit.exceptions.NotFoundException;
+import ru.practicum.shareit.exceptions.UserNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class UserServiceImplTest {
         UserDto userDto = Samples.getUser1();
         UserDto savedUserDto = userService.create(userDto);
         userService.delete(savedUserDto.getId());
-        assertThrows(NotFoundException.class, () -> userService.getById(savedUserDto.getId()));
+        assertThrows(UserNotFoundException.class, () -> userService.getById(savedUserDto.getId()));
     }
 
     @Test
