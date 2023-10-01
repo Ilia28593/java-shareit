@@ -8,9 +8,9 @@ import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.BookingStatusFilter;
+import ru.practicum.shareit.config.DataUtils;
 import ru.practicum.shareit.user.User;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class BookingStateFetchByBookerStrategyPast implements BookingStateFetchByBookerStrategy {
     private final BookingRepository bookingRepository;
+    private final DataUtils dataUtils;
 
     @Override
     public BookingStatusFilter getStrategyName() {
@@ -27,6 +28,6 @@ public class BookingStateFetchByBookerStrategyPast implements BookingStateFetchB
     @Override
     public Collection<Booking> fetch(User user, Pageable pageable) {
         return bookingRepository.findBookingsByBookerAndStatusInAndEndBefore(
-                user, List.of(BookingStatus.APPROVED, BookingStatus.WAITING), LocalDateTime.now(), pageable);
+                user, List.of(BookingStatus.APPROVED, BookingStatus.WAITING), dataUtils.getCurrentLocalTime(), pageable);
     }
 }
