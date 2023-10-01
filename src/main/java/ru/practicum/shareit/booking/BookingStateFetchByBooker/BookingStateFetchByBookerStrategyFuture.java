@@ -8,7 +8,7 @@ import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.BookingStatusFilter;
-import ru.practicum.shareit.config.DataUtils;
+import ru.practicum.shareit.config.DataUtilsService;
 import ru.practicum.shareit.user.User;
 
 import java.util.Collection;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class BookingStateFetchByBookerStrategyFuture implements BookingStateFetchByBookerStrategy {
     private final BookingRepository bookingRepository;
-    private final DataUtils dataUtils;
+    private final DataUtilsService dataUtils;
 
     @Override
     public BookingStatusFilter getStrategyName() {

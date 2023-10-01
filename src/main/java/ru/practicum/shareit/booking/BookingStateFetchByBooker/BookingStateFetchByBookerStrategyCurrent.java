@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatusFilter;
-import ru.practicum.shareit.config.DataUtils;
+import ru.practicum.shareit.config.DataUtilsService;
 import ru.practicum.shareit.user.User;
 
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.Collection;
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class BookingStateFetchByBookerStrategyCurrent implements BookingStateFetchByBookerStrategy {
-    private final DataUtils dataUtils;
+    private final DataUtilsService dataUtils;
     private final BookingRepository bookingRepository;
 
     @Override
@@ -23,7 +23,6 @@ public class BookingStateFetchByBookerStrategyCurrent implements BookingStateFet
         return BookingStatusFilter.CURRENT;
     }
 
-    @Override
     public Collection<Booking> fetch(User user, Pageable pageable) {
         return bookingRepository.findBookingsByBookerAndStartBeforeAndEndAfter(
                 user, dataUtils.getCurrentLocalTime(), dataUtils.getCurrentLocalTime(), pageable);
