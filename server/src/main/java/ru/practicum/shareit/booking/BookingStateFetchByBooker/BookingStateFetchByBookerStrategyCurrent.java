@@ -9,7 +9,6 @@ import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatusFilter;
 import ru.practicum.shareit.user.User;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 import static ru.practicum.shareit.config.DataUtilsService.now;
