@@ -5,6 +5,15 @@ CREATE TABLE IF NOT EXISTS users
     email varchar(255) NOT NULL,
     CONSTRAINT UQ_USER_EMAIL UNIQUE (email)
 );
+
+CREATE TABLE IF NOT EXISTS item_requests
+(
+    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    description VARCHAR(255)                NOT NULL,
+    user_id     BIGINT REFERENCES users (id),
+    created     TIMESTAMP WITHOUT TIME ZONE NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS items
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -12,14 +21,17 @@ CREATE TABLE IF NOT EXISTS items
     description varchar(255) NOT NULL,
     available   boolean,
     user_id     BIGINT references users (id),
-    CONSTRAINT UQ_OWNER_ITEM_NAME UNIQUE (user_id, name)
+    request_id  BIGINT references item_requests (id)
 );
-CREATE TABLE IF NOT EXISTS item_requests
+
+CREATE TABLE IF NOT EXISTS bookings
 (
-    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    description VARCHAR(255)                NOT NULL,
-    user_id     BIGINT REFERENCES users (id),
-    created     TIMESTAMP WITHOUT TIME ZONE NOT NULL
+    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    start_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    end_date   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    item_id    BIGINT references items (id),
+    user_id    BIGINT references users (id),
+    status     varchar(100)                NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS comments
@@ -29,13 +41,4 @@ CREATE TABLE IF NOT EXISTS comments
     item_id BIGINT references items (id),
     user_id BIGINT references users (id),
     created TIMESTAMP WITHOUT TIME ZONE NOT NULL
-);
-CREATE TABLE IF NOT EXISTS bookings
-(
-    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    start_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    end_date   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    item_id    BIGINT references items (id),
-    user_id    BIGINT references users (id),
-    status     varchar(100)
 );
