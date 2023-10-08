@@ -15,7 +15,7 @@ import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.utils.Constants;
+import ru.practicum.shareit.config.Constants;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
