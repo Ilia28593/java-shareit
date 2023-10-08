@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.BookingStateByBooker;
+package ru.practicum.shareit.booking.BookingStateFetchByBooker;
 
 import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.model.Booking;
