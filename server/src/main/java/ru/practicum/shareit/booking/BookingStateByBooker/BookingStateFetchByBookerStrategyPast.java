@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.BookingStateFetchByBooker;
+package ru.practicum.shareit.booking.BookingStateByBooker;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,19 +11,23 @@ import ru.practicum.shareit.booking.BookingStatusFilter;
 import ru.practicum.shareit.user.User;
 
 import java.util.Collection;
+import java.util.List;
+
+import static ru.practicum.shareit.config.DataUtilsService.now;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class BookingStateFetchByBookerStrategyRejected implements BookingStateFetchByBookerStrategy {
+public class BookingStateFetchByBookerStrategyPast implements BookingStateFetchByBookerStrategy {
     private final BookingRepository bookingRepository;
 
     @Override
     public BookingStatusFilter getStrategyName() {
-        return BookingStatusFilter.REJECTED;
+        return BookingStatusFilter.PAST;
     }
 
     @Override
     public Collection<Booking> fetch(User user, Pageable pageable) {
-        return bookingRepository.findBookingsByBookerAndStatus(user, BookingStatus.REJECTED, pageable);
+        return bookingRepository.findBookingsByBookerAndStatusInAndEndBefore(
+                user, List.of(BookingStatus.APPROVED, BookingStatus.WAITING), now(), pageable);
     }
 }

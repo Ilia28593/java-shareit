@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.BookingStateFetchByBooker;
+package ru.practicum.shareit.booking.BookingStateByBooker;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

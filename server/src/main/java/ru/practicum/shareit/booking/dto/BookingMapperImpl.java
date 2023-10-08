@@ -18,36 +18,33 @@ public class BookingMapperImpl implements BookingMapper {
 
     @Override
     public Booking toBooking(BookingRequestDto bookingRequestDto, Item item, User user) {
-        Booking booking = new Booking();
-        booking.setItem(item);
-        booking.setBooker(user);
-        booking.setStart(bookingRequestDto.getStart());
-        booking.setEnd(bookingRequestDto.getEnd());
-        booking.setStatus(BookingStatus.WAITING);
-        return booking;
+        return new Booking()
+                .setItem(item)
+                .setBooker(user)
+                .setStart(bookingRequestDto.getStart())
+                .setEnd(bookingRequestDto.getEnd())
+                .setStatus(BookingStatus.WAITING);
     }
 
     @Override
     public BookingResponseDto toBookingDtoResponse(Booking booking) {
-        BookingResponseDto bookingResponseDto = new BookingResponseDto();
-        bookingResponseDto.setId(booking.getId());
-        bookingResponseDto.setStatus(booking.getStatus());
-        bookingResponseDto.setStart(booking.getStart());
-        bookingResponseDto.setEnd(booking.getEnd());
-        bookingResponseDto.setItem(itemMapper.toItemDto(booking.getItem()));
-        bookingResponseDto.setBooker(userMapper.toUserDto(booking.getBooker()));
-        return bookingResponseDto;
+        return new BookingResponseDto()
+                .setId(booking.getId())
+                .setStatus(booking.getStatus())
+                .setStart(booking.getStart())
+                .setEnd(booking.getEnd())
+                .setItem(itemMapper.toItemDto(booking.getItem()))
+                .setBooker(userMapper.toUserDto(booking.getBooker()));
     }
 
     @Override
     public BookingInItemResponseDto toBookingInItemDtoResponse(Booking booking) {
-        BookingInItemResponseDto bookingDtoResponse = new BookingInItemResponseDto();
-        bookingDtoResponse.setId(booking.getId());
-        bookingDtoResponse.setStatus(booking.getStatus());
-        bookingDtoResponse.setStart(booking.getStart());
-        bookingDtoResponse.setEnd(booking.getEnd());
-        bookingDtoResponse.setItem(itemMapper.toItemDto(booking.getItem()));
-        bookingDtoResponse.setBookerId(booking.getBooker().getId());
-        return bookingDtoResponse;
+        return new BookingInItemResponseDto()
+                .setId(booking.getId())
+                .setStatus(booking.getStatus())
+                .setStart(booking.getStart())
+                .setEnd(booking.getEnd())
+                .setItem(itemMapper.toItemDto(booking.getItem()))
+                .setBookerId(booking.getBooker().getId());
     }
 }

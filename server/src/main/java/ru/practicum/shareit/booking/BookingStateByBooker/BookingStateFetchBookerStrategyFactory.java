@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.BookingStateFetchByBooker;
+package ru.practicum.shareit.booking.BookingStateByBooker;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -11,6 +11,8 @@ import ru.practicum.shareit.config.Constants;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
+import static ru.practicum.shareit.config.Constants.HEADER_USER_ID;
+
 @RestController
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -20,25 +22,25 @@ public class ItemRequestController {
 
     @PostMapping
     public ResponseEntity<Object> create(@Validated @RequestBody ItemRequestDto itemRequestDto,
-                                         @RequestHeader(Constants.HEADER_USER_ID) long userId) {
+                                         @RequestHeader(HEADER_USER_ID) long userId) {
         return itemRequestClient.create(itemRequestDto, userId);
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAllByUserId(@RequestHeader(Constants.HEADER_USER_ID) long userId) {
+    public ResponseEntity<Object> findAllByUserId(@RequestHeader(HEADER_USER_ID) long userId) {
         return itemRequestClient.findByUserId(userId);
     }
 
     @GetMapping("/all")
     public ResponseEntity<Object> findAll(@PositiveOrZero @RequestParam(required = false) Integer from,
                                           @Positive @RequestParam(required = false) Integer size,
-                                          @RequestHeader(Constants.HEADER_USER_ID) long userId) {
+                                          @RequestHeader(HEADER_USER_ID) long userId) {
         return itemRequestClient.findAll(from, size, userId);
     }
 
     @GetMapping("/{requestId}")
     public ResponseEntity<Object> findRequestById(@PathVariable long requestId,
-                                                  @RequestHeader(Constants.HEADER_USER_ID) long userId) {
+                                                  @RequestHeader(HEADER_USER_ID) long userId) {
         return itemRequestClient.findById(requestId, userId);
     }
 }

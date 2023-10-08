@@ -19,16 +19,12 @@ public class BookingClient extends BaseClient {
 
     @Autowired
     public BookingClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
-        super(
-                builder
-                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
+        super(builder.uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
                         .requestFactory(HttpComponentsClientHttpRequestFactory::new)
-                        .build()
-        );
+                        .build());
     }
 
-    public ResponseEntity<Object> create(BookingRequestDto requestDto,
-                                         long userId) {
+    public ResponseEntity<Object> create(BookingRequestDto requestDto, long userId) {
         return post("", userId, requestDto);
     }
 
@@ -37,9 +33,7 @@ public class BookingClient extends BaseClient {
     }
 
     public ResponseEntity<Object> approve(long bookingId, boolean approved, long userId) {
-        Map<String, Object> parameters = Map.of(
-                "approved", approved
-        );
+        Map<String, Object> parameters = Map.of("approved", approved);
         return patch("/" + bookingId + "?approved={approved}", userId, parameters, null);
     }
 
