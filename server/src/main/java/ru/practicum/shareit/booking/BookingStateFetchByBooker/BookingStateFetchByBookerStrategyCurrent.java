@@ -12,6 +12,8 @@ import ru.practicum.shareit.user.User;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import static ru.practicum.shareit.config.DataUtilsService.now;
+
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class BookingStateFetchByBookerStrategyCurrent implements BookingStateFetchByBookerStrategy {
@@ -25,6 +27,6 @@ public class BookingStateFetchByBookerStrategyCurrent implements BookingStateFet
     @Override
     public Collection<Booking> fetch(User user, Pageable pageable) {
         return bookingRepository.findBookingsByBookerAndStartBeforeAndEndAfter(
-                user, LocalDateTime.now(), LocalDateTime.now(), pageable);
+                user, now(), now(), pageable);
     }
 }
