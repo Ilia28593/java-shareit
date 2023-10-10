@@ -13,10 +13,10 @@ import ru.practicum.shareit.config.Utilities;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.PermissionViolationException;
-import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -33,13 +33,13 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
-    private final ItemRepository itemRepository;
+    private final ItemService itemService;
     private final BookingStateFetchBookerStrategyFactory bookingStateFetchBookerStrategyFactory;
 
     @Override
     public BookingResponseDto create(BookingRequestDto bookingRequestDto, long userId) {
         User user = getUser(userId);
-        Item item = getItem(bookingRequestDto);
+        Item item = itemService.getItemById(bookingRequestDto.getItemId());
         if (!item.getAvailable()) {
             throw new BadRequestException(String.format("item %s not available", item.getId()));
         }
@@ -114,11 +114,6 @@ public class BookingServiceImpl implements BookingService {
         }
         return bookings.stream().map(bookingMapper::toBookingDtoResponse)
                 .collect(Collectors.toList());
-    }
-
-    private Item getItem(BookingRequestDto bookingDtoRequest) {
-        return itemRepository.findById(bookingDtoRequest.getItemId())
-                .orElseThrow(() -> new NotFoundException(ITEM_NO_FOUND_FROM_ID + bookingDtoRequest.getItemId()));
     }
 
     private User getUser(long userId) {

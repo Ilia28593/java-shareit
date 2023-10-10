@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
 import ru.practicum.shareit.config.Constants;
+import ru.practicum.shareit.request.service.ItemRequestService;
 
 import java.util.Collection;
 import java.util.Collections;

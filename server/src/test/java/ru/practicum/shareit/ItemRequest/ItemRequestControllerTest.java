@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.Fixtures;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.ItemRequestController;
-import ru.practicum.shareit.request.ItemRequestService;
+import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
 import ru.practicum.shareit.config.Constants;

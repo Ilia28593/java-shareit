@@ -1,8 +1,9 @@
-package ru.practicum.shareit.request;
+package ru.practicum.shareit.request.service;
 
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
+import ru.practicum.shareit.request.model.ItemRequest;
 
 import java.util.Collection;
 
@@ -15,4 +16,5 @@ public interface ItemRequestService {
     Collection<ItemRequestResponseDto> findAll(int from, int size, long userId);
 
     ItemRequestResponseDto findById(long requestId, long userId);
+    ItemRequest getItemRequestById(long requestId);
 }
