@@ -22,7 +22,7 @@ import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.service.ItemRequestService;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;

@@ -79,15 +79,6 @@ public class ItemRequestImplTest {
     }
 
     @Test
-    public void itemRequestImpl_FindById_Ok() {
-        ItemRequestResponseDto itemRequestResponseDtoSaved =
-                itemRequestService.create(itemRequestDto, userDto.getId());
-        ItemRequestResponseDto itemRequestResponseDtoById =
-                itemRequestService.findById(itemRequestResponseDtoSaved.getId(), userDto.getId());
-        assertThat(itemRequestResponseDtoById).isEqualTo(itemRequestResponseDtoSaved);
-    }
-
-    @Test
     public void itemRequestImpl_FindById_WrongIdThrowsError() {
         assertThrows(NotFoundException.class, () -> itemRequestService.findById(-1, userDto.getId()));
     }

@@ -14,8 +14,8 @@ import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.PermissionViolationException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -33,13 +33,13 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
-    private final ItemService itemService;
+    private final ItemRepository itemRepository;
     private final BookingStateFetchBookerStrategyFactory bookingStateFetchBookerStrategyFactory;
 
     @Override
     public BookingResponseDto create(BookingRequestDto bookingRequestDto, long userId) {
         User user = getUser(userId);
-        Item item = itemService.getItemById(bookingRequestDto.getItemId());
+        Item item = getItem(bookingRequestDto);
         if (!item.getAvailable()) {
             throw new BadRequestException(String.format("item %s not available", item.getId()));
         }
@@ -52,7 +52,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingResponseDto approve(long bookingId, boolean approved, long userId) {
-        Booking booking = getBooking(bookingId,userId);
+        Booking booking = getBooking(bookingId, userId);
         if (booking.getItem().getOwner().getId() != userId) {
             throw new PermissionViolationException("Only item owner can approve booking");
         }
@@ -66,7 +66,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponseDto getById(long bookingId, long userId) {
         User user = getUser(userId);
-        Booking booking = getBooking(bookingId,userId);
+        Booking booking = getBooking(bookingId, userId);
         if (!Objects.equals(booking.getBooker(), user) && !Objects.equals(booking.getItem().getOwner(), user)) {
             throw new NotFoundException("Booking was not booked by user and item owner is different");
         }
@@ -114,6 +114,11 @@ public class BookingServiceImpl implements BookingService {
         }
         return bookings.stream().map(bookingMapper::toBookingDtoResponse)
                 .collect(Collectors.toList());
+    }
+
+    private Item getItem(BookingRequestDto bookingDtoRequest) {
+        return itemRepository.findById(bookingDtoRequest.getItemId())
+                .orElseThrow(() -> new NotFoundException(ITEM_NO_FOUND_FROM_ID + bookingDtoRequest.getItemId()));
     }
 
     private User getUser(long userId) {
