@@ -17,26 +17,26 @@ public class BookingMapperImpl implements BookingMapper {
     private final UserMapper userMapper;
 
     @Override
-    public Booking toBooking(BookingRequestDto bookingRequestDto, Item item, User user) {
+    public Booking toBooking(BookingDtoRequest bookingDtoRequest, Item item, User user) {
         Booking booking = new Booking();
         booking.setItem(item);
         booking.setBooker(user);
-        booking.setStart(bookingRequestDto.getStart());
-        booking.setEnd(bookingRequestDto.getEnd());
+        booking.setStart(bookingDtoRequest.getStart());
+        booking.setEnd(bookingDtoRequest.getEnd());
         booking.setStatus(BookingStatus.WAITING);
         return booking;
     }
 
     @Override
-    public BookingResponseDto toBookingDtoResponse(Booking booking) {
-        BookingResponseDto bookingResponseDto = new BookingResponseDto();
-        bookingResponseDto.setId(booking.getId());
-        bookingResponseDto.setStatus(booking.getStatus());
-        bookingResponseDto.setStart(booking.getStart());
-        bookingResponseDto.setEnd(booking.getEnd());
-        bookingResponseDto.setItem(itemMapper.toItemDto(booking.getItem()));
-        bookingResponseDto.setBooker(userMapper.toUserDto(booking.getBooker()));
-        return bookingResponseDto;
+    public BookingDtoResponse toBookingDtoResponse(Booking booking) {
+        BookingDtoResponse bookingDtoResponse = new BookingDtoResponse();
+        bookingDtoResponse.setId(booking.getId());
+        bookingDtoResponse.setStatus(booking.getStatus());
+        bookingDtoResponse.setStart(booking.getStart());
+        bookingDtoResponse.setEnd(booking.getEnd());
+        bookingDtoResponse.setItem(itemMapper.toItemDto(booking.getItem()));
+        bookingDtoResponse.setBooker(userMapper.toUserDto(booking.getBooker()));
+        return bookingDtoResponse;
     }
 
     @Override

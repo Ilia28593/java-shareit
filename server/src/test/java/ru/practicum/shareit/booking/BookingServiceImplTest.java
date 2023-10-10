@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.Fixtures;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.booking.dto.BookingResponseDto;
-import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.Samples;
+import ru.practicum.shareit.booking.dto.BookingDtoResponse;
+import ru.practicum.shareit.booking.dto.BookingDtoRequest;
+import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.time.LocalDateTime;
@@ -30,23 +30,23 @@ public class BookingServiceImplTest {
     private final BookingService bookingService;
     private final ItemService itemService;
     private final UserService userService;
-    private BookingRequestDto bookingDto;
+    private BookingDtoRequest bookingDto;
     private ItemDto itemDto;
     private UserDto userDto;
     private UserDto userDto2;
 
     @BeforeEach
     public void beforeEach() {
-        userDto = userService.create(Fixtures.getUser1());
-        userDto2 = userService.create(Fixtures.getUser2());
-        itemDto = itemService.create(Fixtures.getItem1(), userDto2.getId());
-        bookingDto = Fixtures.getBooking(itemDto.getId());
+        userDto = userService.create(Samples.getUser1());
+        userDto2 = userService.create(Samples.getUser2());
+        itemDto = itemService.create(Samples.getItem1(), userDto2.getId());
+        bookingDto = Samples.getBooking(itemDto.getId());
     }
 
     @Test
-    public void bookingServiceImpl_Save_ResponseIsValid() {
-        BookingResponseDto bookingResponseDto = bookingService.create(bookingDto, userDto.getId());
-        assertThat(bookingResponseDto).hasFieldOrPropertyWithValue("item", itemDto)
+    public void saveResponseIsValid() {
+        BookingDtoResponse bookingDtoResponse = bookingService.create(bookingDto, userDto.getId());
+        assertThat(bookingDtoResponse).hasFieldOrPropertyWithValue("item", itemDto)
                 .hasFieldOrPropertyWithValue("booker", userDto)
                 .hasFieldOrPropertyWithValue("start", bookingDto.getStart())
                 .hasFieldOrPropertyWithValue("end", bookingDto.getEnd())
@@ -54,133 +54,133 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void bookingServiceImpl_GetById_Ok() {
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        BookingResponseDto bookingResponseDtoGetById =
+    public void getByIdOk() {
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        BookingDtoResponse bookingDtoResponseGetById =
                 bookingService.getById(bookingDtoSaved.getId(), userDto.getId());
         assertThat(bookingResponseDtoGetById).isEqualTo(bookingDtoSaved);
     }
 
     @Test
-    public void bookingServiceImpl_Approve_True() {
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        BookingResponseDto bookingDtoAfterApproval = bookingService.approve(bookingDtoSaved.getId(), true, userDto2.getId());
+    public void approveTrue() {
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        BookingDtoResponse bookingDtoAfterApproval = bookingService.approve(bookingDtoSaved.getId(), true, userDto2.getId());
         assertThat(bookingDtoAfterApproval).hasFieldOrPropertyWithValue("status", APPROVED);
     }
 
     @Test
-    public void bookingServiceImpl_Approve_False() {
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        BookingResponseDto bookingDtoAfterApproval = bookingService.approve(bookingDtoSaved.getId(), false, userDto2.getId());
+    public void approveFalse() {
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        BookingDtoResponse bookingDtoAfterApproval = bookingService.approve(bookingDtoSaved.getId(), false, userDto2.getId());
         assertThat(bookingDtoAfterApproval).hasFieldOrPropertyWithValue("status", BookingStatus.REJECTED);
     }
 
     @Test
-    public void bookingServiceImpl_GetAllByBooker() {
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+    public void getAllByBooker() {
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByBookerId(ALL, userDto.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
 
     @Test
-    public void bookingServiceImpl_GetCurrentByBooker() {
+    public void getCurrentByBooker() {
         bookingDto.setStart(LocalDateTime.now().minusDays(5));
         bookingDto.setEnd(LocalDateTime.now().plusDays(5));
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByBookerId(CURRENT, userDto.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
 
     @Test
-    public void bookingServiceImpl_GetFutureByBooker() {
+    public void getFutureByBooker() {
         bookingDto.setStart(LocalDateTime.now().plusDays(5));
         bookingDto.setEnd(LocalDateTime.now().plusDays(6));
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByBookerId(FUTURE, userDto.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
 
     @Test
-    public void bookingServiceImpl_GetPastByBooker() {
+    public void getPastByBooker() {
         bookingDto.setStart(LocalDateTime.now().minusDays(5));
         bookingDto.setEnd(LocalDateTime.now().minusDays(4));
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByBookerId(PAST, userDto.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
 
     @Test
-    public void bookingServiceImpl_GetRejectedByBooker() {
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+    public void getRejectedByBooker() {
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         bookingDtoSaved = bookingService.approve(bookingDtoSaved.getId(), false, userDto2.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByBookerId(BookingStatusFilter.REJECTED, userDto.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
 
     @Test
-    public void bookingServiceImpl_GetWaitingByBooker() {
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+    public void getWaitingByBooker() {
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByBookerId(BookingStatusFilter.WAITING, userDto.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
 
     @Test
-    public void bookingServiceImpl_GetAllByItemOwner() {
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+    public void getAllByItemOwner() {
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByItemOwnerId(ALL, userDto2.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
 
     @Test
-    public void bookingServiceImpl_GetCurrentByItemOwner() {
+    public void getCurrentByItemOwner() {
         bookingDto.setStart(LocalDateTime.now().minusDays(5));
         bookingDto.setEnd(LocalDateTime.now().plusDays(5));
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByItemOwnerId(CURRENT, userDto2.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
 
     @Test
-    public void bookingServiceImpl_GetFutureByItemOwner() {
+    public void getFutureByItemOwner() {
         bookingDto.setStart(LocalDateTime.now().plusDays(5));
         bookingDto.setEnd(LocalDateTime.now().plusDays(6));
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByItemOwnerId(FUTURE, userDto2.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
 
     @Test
-    public void bookingServiceImpl_GetPastByItemOwner() {
+    public void getPastByItemOwner() {
         bookingDto.setStart(LocalDateTime.now().minusDays(5));
         bookingDto.setEnd(LocalDateTime.now().minusDays(4));
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByItemOwnerId(PAST, userDto2.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
 
     @Test
-    public void bookingServiceImpl_GetRejectedByItemOwner() {
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+    public void getRejectedByItemOwner() {
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         bookingDtoSaved = bookingService.approve(bookingDtoSaved.getId(), false, userDto2.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByItemOwnerId(BookingStatusFilter.REJECTED, userDto2.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
 
     @Test
-    public void bookingServiceImpl_GetWaitingByItemOwner() {
-        BookingResponseDto bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
-        Collection<BookingResponseDto> bookingDtosResponse =
+    public void getWaitingByItemOwner() {
+        BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
+        Collection<BookingDtoResponse> bookingDtosResponse =
                 bookingService.getAllByItemOwnerId(BookingStatusFilter.WAITING, userDto2.getId(), 0, Integer.MAX_VALUE);
         assertThat(bookingDtosResponse).isEqualTo(List.of(bookingDtoSaved));
     }
