@@ -12,7 +12,6 @@ import ru.practicum.shareit.Samples;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
