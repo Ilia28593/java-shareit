@@ -6,17 +6,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingStateFetchByBooker.BookingStateFetchBookerStrategyFactory;
-import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
+import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.config.Utilities;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.PermissionViolationException;
-import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserRepository;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -52,7 +52,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDtoResponse approve(long bookingId, boolean approved, long userId) {
-        Booking booking = getBooking(bookingId,userId);
+        Booking booking = getBooking(bookingId, userId);
         if (booking.getItem().getOwner().getId() != userId) {
             throw new PermissionViolationException("Only item owner can approve booking");
         }
@@ -66,7 +66,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDtoResponse getById(long bookingId, long userId) {
         User user = getUser(userId);
-        Booking booking = getBooking(bookingId,userId);
+        Booking booking = getBooking(bookingId, userId);
         if (!Objects.equals(booking.getBooker(), user) && !Objects.equals(booking.getItem().getOwner(), user)) {
             throw new NotFoundException("Booking was not booked by user and item owner is different");
         }

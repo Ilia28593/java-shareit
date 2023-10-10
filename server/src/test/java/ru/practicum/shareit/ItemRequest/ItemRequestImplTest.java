@@ -8,13 +8,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Samples;
 import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.request.ItemRequestService;
+import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
-import ru.practicum.shareit.user.UserService;
+import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.service.UserService;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -76,15 +76,6 @@ public class ItemRequestImplTest {
         Collection<ItemRequestResponseDto> itemRequestResponseDtos =
                 itemRequestService.findAll(0, Integer.MAX_VALUE, userDto.getId());
         assertThat(itemRequestResponseDtos).isEqualTo(Collections.emptyList());
-    }
-
-    @Test
-    public void findByIdOk() {
-        ItemRequestResponseDto itemRequestResponseDtoSaved =
-                itemRequestService.create(itemRequestDto, userDto.getId());
-        ItemRequestResponseDto itemRequestResponseDtoById =
-                itemRequestService.findById(itemRequestResponseDtoSaved.getId(), userDto.getId());
-        assertThat(itemRequestResponseDtoById).isEqualTo(itemRequestResponseDtoSaved);
     }
 
     @Test

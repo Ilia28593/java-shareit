@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Samples;
-import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
-import ru.practicum.shareit.item.ItemService;
+import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.user.UserService;
+import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -58,7 +58,7 @@ public class BookingServiceImplTest {
         BookingDtoResponse bookingDtoSaved = bookingService.create(bookingDto, userDto.getId());
         BookingDtoResponse bookingDtoResponseGetById =
                 bookingService.getById(bookingDtoSaved.getId(), userDto.getId());
-        assertThat(bookingResponseDtoGetById).isEqualTo(bookingDtoSaved);
+        assertThat(bookingDtoResponseGetById).isEqualTo(bookingDtoSaved);
     }
 
     @Test
