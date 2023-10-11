@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import ru.practicum.shareit.booking.dto.BookingInItemResponseDto;
 
 import java.util.Collection;
@@ -11,6 +12,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Accessors(chain = true)
 public class ItemDtoWithBookingDto {
     private Long id;
     private String name;

@@ -7,8 +7,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingStateFetchByBooker.BookingStateFetchBookerStrategyFactory;
 import ru.practicum.shareit.booking.dto.BookingMapper;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.booking.dto.BookingDtoRequest;
+import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.config.Utilities;
 import ru.practicum.shareit.exceptions.BadRequestException;
 import ru.practicum.shareit.exceptions.NotFoundException;
@@ -37,21 +37,21 @@ public class BookingServiceImpl implements BookingService {
     private final BookingStateFetchBookerStrategyFactory bookingStateFetchBookerStrategyFactory;
 
     @Override
-    public BookingResponseDto create(BookingRequestDto bookingRequestDto, long userId) {
+    public BookingDtoResponse create(BookingDtoRequest bookingDtoRequest, long userId) {
         User user = getUser(userId);
-        Item item = getItem(bookingRequestDto);
+        Item item = getItem(bookingDtoRequest);
         if (!item.getAvailable()) {
             throw new BadRequestException(String.format("item %s not available", item.getId()));
         }
         if (item.getOwner().getId() == userId) {
             throw new NotFoundException(String.format("user can not book its own item", item.getId()));
         }
-        Booking booking = bookingMapper.toBooking(bookingRequestDto, item, user);
+        Booking booking = bookingMapper.toBooking(bookingDtoRequest, item, user);
         return bookingMapper.toBookingDtoResponse(bookingRepository.save(booking));
     }
 
     @Override
-    public BookingResponseDto approve(long bookingId, boolean approved, long userId) {
+    public BookingDtoResponse approve(long bookingId, boolean approved, long userId) {
         Booking booking = getBooking(bookingId,userId);
         if (booking.getItem().getOwner().getId() != userId) {
             throw new PermissionViolationException("Only item owner can approve booking");
@@ -64,7 +64,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponseDto getById(long bookingId, long userId) {
+    public BookingDtoResponse getById(long bookingId, long userId) {
         User user = getUser(userId);
         Booking booking = getBooking(bookingId,userId);
         if (!Objects.equals(booking.getBooker(), user) && !Objects.equals(booking.getItem().getOwner(), user)) {
@@ -76,7 +76,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<BookingResponseDto> getAllByBookerId(BookingStatusFilter state, long userId, int from, int size) {
+    public Collection<BookingDtoResponse> getAllByBookerId(BookingStatusFilter state, long userId, int from, int size) {
         User user = getUser(userId);
         Pageable pageable = Utilities.getPageable(from, size, Sort.by("start").descending());
         Collection<Booking> bookings = bookingStateFetchBookerStrategyFactory.findStrategy(state).fetch(user, pageable);
@@ -85,7 +85,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<BookingResponseDto> getAllByItemOwnerId(BookingStatusFilter state, long userId, int from, int size) {
+    public Collection<BookingDtoResponse> getAllByItemOwnerId(BookingStatusFilter state, long userId, int from, int size) {
         User user = getUser(userId);
         Collection<Booking> bookings;
         Pageable pageable = Utilities.getPageable(from, size, Sort.by("start").descending());
@@ -116,7 +116,7 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
     }
 
-    private Item getItem(BookingRequestDto bookingDtoRequest) {
+    private Item getItem(BookingDtoRequest bookingDtoRequest) {
         return itemRepository.findById(bookingDtoRequest.getItemId())
                 .orElseThrow(() -> new NotFoundException(ITEM_NO_FOUND_FROM_ID + bookingDtoRequest.getItemId()));
     }
